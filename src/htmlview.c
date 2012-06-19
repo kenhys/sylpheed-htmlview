@@ -7,6 +7,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <webkit/webkit.h>
+#include <webkit/webkitwebview.h>
 
 #include "sylmain.h"
 #include "plugin.h"
