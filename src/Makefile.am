@@ -1,12 +1,13 @@
 libdir = $(plugindir)
 
+WEBKITGTK_CFLAGS=`pkg-config --cflags webkit-1.0`
+WEBKITGTK_LIBS=`pkg-config --libs webkit-1.0`
+
 lib_LTLIBRARIES = htmlview.la
 
 htmlview_la_SOURCES = htmlview.c htmlview.h ui.c 
-htmlview_la_LDFLAGS = -module -no-undefined -avoid-version
+htmlview_la_LDFLAGS = -module -no-undefined -avoid-version $(WEBKITGTK_LIBS)
 
-WEBKITGTK_CFLAGS=`pkg-config --cflags webkit-1.0`
-WEBKITGTK_LIBS=`pkg-config --libs webkit-1.0`
 
 INCLUDES = \
 	$(GTK_CFLAGS) \
@@ -18,7 +19,6 @@ INCLUDES = \
 
 htmlview_la_LIBADD = \
 	$(GTK_LIBS) \
-	$(WEBKITGTK_LIBS) \
         $(top_builddir)/src/libsylpheed-plugin-0.la \
 	$(top_builddir)/libsylph/libsylph-0.la
 
