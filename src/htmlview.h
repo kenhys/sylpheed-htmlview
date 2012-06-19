@@ -4,8 +4,8 @@
  *
  */
 
-#ifndef __SYLICONS_H__
-#define __SYLICONS_H__
+#ifndef __HTMLVIEW_H__
+#define __HTMLVIEW_H__
 
 #define HTMLVIEW "htmlview"
 #define HTMLVIEWRC "htmlviewrc"
