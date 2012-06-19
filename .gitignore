@@ -1,4 +1,10 @@
+*.in
 private_build.h
 *.dll
 *.o
+*.la
+*.lo
 .compile
+.deps
+.libs
+Makefile
