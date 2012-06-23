@@ -241,7 +241,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   g_return_if_fail(messageview != NULL);
 
   if (option.html_view == NULL) {
-    option.html_view = create_htmlview(messageview->notebook);
+    option.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
   }
 
   MimeInfo *mimeinfo = procmime_scan_message(msginfo);
