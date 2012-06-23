@@ -199,21 +199,6 @@ typedef struct _Mailer {
     gchar *image;
 } Mailer;
 
-static Mailer x_mailer[] = {
-    {"Microsoft Office Outlook", "ms_outlook12.png"},
-    {"Microsoft Outlook Express", "ms_outlook_express.png"},
-    {"Microsoft Outlook", "ms_outlook.png"},
-    {"Mew", "mew.png"},
-    {"Thunderbird", "thunderbird.png"},
-    {"Wanderlust", "wanderlust.png"},
-    {"Becky!", "becky.png"},
-    {"Sylpheed", "sylpheed.png"},
-    {"Claws Mail", "claws-mail.png"},
-    {"Mutt", "mutt.png"},
-    {"Shuriken", "shuriken_pro.png"},
-    {"Eudora", "eudora.png"},
-};
-
 static WebKitWebView *create_htmlview(GtkNotebook *notebook)
 {
 
