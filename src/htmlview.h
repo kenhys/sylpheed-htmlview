@@ -7,6 +7,8 @@
 #ifndef __HTMLVIEW_H__
 #define __HTMLVIEW_H__
 
+#include <webkit/webkitwebview.h>
+
 #define HTMLVIEW "htmlview"
 #define HTMLVIEWRC "htmlviewrc"
 #define _(String)   dgettext(HTMLVIEW, String)
