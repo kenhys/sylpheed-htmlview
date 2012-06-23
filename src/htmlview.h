@@ -28,6 +28,8 @@ struct _HtmlViewOption {
   /* rcfile */
   GKeyFile *rcfile;
   
+  WebKitWebView *html_view;
+
   GtkWidget *folder_entry;
   gchar *folder_path;
 };
