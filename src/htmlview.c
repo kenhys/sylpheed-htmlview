@@ -28,7 +28,7 @@ static SylPluginInfo info = {
   N_(PLUGIN_DESC)
 };
 
-HtmlViewOption g_opt;
+HtmlViewOption option;
 
 static void init_done_cb(GObject *obj, gpointer data);
 static void app_exit_cb(GObject *obj, gpointer data);
@@ -72,7 +72,7 @@ void plugin_load(void)
       }
       if (LOCAL_FOLDER(cur_folder)->rootpath!=NULL){
         debug_print("[PLUGIN] folder[%d] rootpath %s\n",i, LOCAL_FOLDER(cur_folder)->rootpath);
-        g_opt.folder_path = g_strdup(LOCAL_FOLDER(cur_folder)->rootpath);
+        option.folder_path = g_strdup(LOCAL_FOLDER(cur_folder)->rootpath);
         break;
       }
     }
@@ -135,10 +135,11 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
     syl_plugin_alertpanel_message(_("HtmlView"), _("does not support multiple MH folder"), ALERT_ERROR);
   } else {
     if (mh_folder != NULL){
-      LOCAL_FOLDER(mh_folder)->rootpath = g_strdup(gtk_entry_get_text(GTK_ENTRY(g_opt.folder_entry)));
+      LOCAL_FOLDER(mh_folder)->rootpath = g_strdup(gtk_entry_get_text(GTK_ENTRY(option.folder_entry)));
     }
     folder_write_list();
   }
+#endif
   gtk_widget_destroy(GTK_WIDGET(data));
 }
 
@@ -172,9 +173,9 @@ static void exec_htmlview_menu_cb(void)
   /* notebook */ 
   GtkWidget *notebook = gtk_notebook_new();
   /* main tab */
-  create_config_main_page(notebook, g_opt.rcfile);
+  create_config_main_page(notebook, option.rcfile);
   /* about, copyright tab */
-  create_config_about_page(notebook, g_opt.rcfile);
+  create_config_about_page(notebook, option.rcfile);
 
   gtk_widget_show(notebook);
   gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
