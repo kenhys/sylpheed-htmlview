@@ -77,50 +77,14 @@ gint plugin_interface_version(void)
 
 static void init_done_cb(GObject *obj, gpointer data)
 {
-  g_print("htmlview: %p: app init done\n", obj);
 }
 
 static void app_exit_cb(GObject *obj, gpointer data)
 {
-  g_print("htmlview: %p: app will exit\n", obj);
 }
 
 static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 {
-  GList* folder_list = folder_get_list();
-
-  Folder *cur_folder;
-  GList *cur;
-  gint i;
-  Folder *mh_folder;
-
-#if 0
-  gint mhn = 0;
-  for (i = 0, cur = folder_list; cur != NULL; cur = cur->next, i++) {
-    cur_folder = FOLDER(cur->data);
-    debug_print("[PLUGIN] folder[%d] name %s\n",i, cur_folder->name);
-    if (FOLDER_TYPE(cur_folder) == F_MH) {
-      if (cur_folder->data!=NULL){
-        debug_print("[PLUGIN] folder[%d] data %s\n",i, cur_folder->data);
-      }
-      if (LOCAL_FOLDER(cur_folder)->rootpath!=NULL){
-        debug_print("[PLUGIN] folder[%d] rootpath %s\n",i, LOCAL_FOLDER(cur_folder)->rootpath);
-        if (mhn == 0) {
-          mh_folder = cur_folder;
-        }
-        mhn++;
-      }
-    }
-  }
-  if (mhn != 1){
-    syl_plugin_alertpanel_message(_("HtmlView"), _("does not support multiple MH folder"), ALERT_ERROR);
-  } else {
-    if (mh_folder != NULL){
-      LOCAL_FOLDER(mh_folder)->rootpath = g_strdup(gtk_entry_get_text(GTK_ENTRY(option.folder_entry)));
-    }
-    folder_write_list();
-  }
-#endif
   gtk_widget_destroy(GTK_WIDGET(data));
 }
 
@@ -193,11 +157,6 @@ static void exec_htmlview_menu_cb(void)
   gtk_widget_show_all(window);
 
 }
-
-typedef struct _Mailer {
-    gchar *head;
-    gchar *image;
-} Mailer;
 
 static WebKitWebView *create_htmlview(GtkNotebook *notebook)
 {
