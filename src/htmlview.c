@@ -253,16 +253,10 @@ static WebKitWebView *create_htmlview(GtkNotebook *notebook)
 static void messageview_show_cb(GObject *obj, gpointer msgview,
 				MsgInfo *msginfo, gboolean all_headers)
 {
-  if (!msgview) {
-    g_print("[DEBUG] msgview is NULL\n");
-    return;
-  }
+  g_return_if_fail(msgview != NULL);
 
   MessageView *messageview = (MessageView*)msgview;
-  if (!messageview) {
-    g_print("[DEBUG] messageview is NULL\n");
-    return;
-  }
+  g_return_if_fail(messageview != NULL);
 
   if (option.html_view == NULL) {
     option.html_view = create_htmlview(messageview->notebook);
