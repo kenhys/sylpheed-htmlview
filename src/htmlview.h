@@ -32,8 +32,6 @@ struct _HtmlViewOption {
   
   WebKitWebView *html_view;
 
-  GtkWidget *folder_entry;
-  gchar *folder_path;
 };
     
 static void messageview_show_cb(GObject *obj, gpointer msgview,

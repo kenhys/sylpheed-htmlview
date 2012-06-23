@@ -57,26 +57,6 @@ void plugin_load(void)
   syl_plugin_signal_connect("messageview-show",
                             G_CALLBACK(messageview_show_cb), NULL);
   g_print("htmlview plug-in loading done\n");
-
-  GList* folder_list = folder_get_list();
-  Folder *cur_folder;
-  GList *cur;
-  gint i;
-
-  for (i = 0, cur = folder_list; cur != NULL; cur = cur->next, i++) {
-    cur_folder = FOLDER(cur->data);
-    debug_print("[PLUGIN] folder[%d] name %s\n",i, cur_folder->name);
-    if (FOLDER_TYPE(cur_folder) == F_MH) {
-      if (cur_folder->data!=NULL){
-        debug_print("[PLUGIN] folder[%d] data %s\n",i, cur_folder->data);
-      }
-      if (LOCAL_FOLDER(cur_folder)->rootpath!=NULL){
-        debug_print("[PLUGIN] folder[%d] rootpath %s\n",i, LOCAL_FOLDER(cur_folder)->rootpath);
-        option.folder_path = g_strdup(LOCAL_FOLDER(cur_folder)->rootpath);
-        break;
-      }
-    }
-  }
 }
 
 void plugin_unload(void)
