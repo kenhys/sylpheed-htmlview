@@ -154,7 +154,9 @@ static void exec_htmlview_menu_cb(void)
   /* notebook */ 
   GtkWidget *notebook = gtk_notebook_new();
   /* main tab */
+#if 0
   create_config_main_page(notebook, option.rcfile);
+#endif
   /* about, copyright tab */
   create_config_about_page(notebook, option.rcfile);
 
