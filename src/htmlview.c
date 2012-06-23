@@ -231,6 +231,24 @@ static Mailer x_mailer[] = {
     {"Eudora", "eudora.png"},
 };
 
+static WebKitWebView *create_htmlview(GtkNotebook *notebook)
+{
+
+  WebKitWebView *html_widget = WEBKIT_WEB_VIEW(webkit_web_view_new());
+
+  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled),
+                                 GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_container_add(GTK_CONTAINER(scrolled), GTK_WIDGET(html_widget));
+  gtk_widget_show_all(GTK_WIDGET(scrolled));
+
+  gtk_container_add(GTK_CONTAINER(notebook),
+                    GTK_WIDGET(scrolled));
+  gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(notebook),
+                                  GTK_WIDGET(scrolled), _("Html"));
+  return html_widget;
+}
+
 static void messageview_show_cb(GObject *obj, gpointer msgview,
 				MsgInfo *msginfo, gboolean all_headers)
 {
