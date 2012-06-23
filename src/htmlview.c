@@ -202,6 +202,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     partial->mime_type = MIME_TEXT;
 
     FILE *input = procmime_get_text_content(partial, msg_file, NULL);
+
     gchar *html_buf = calloc(partial->size+1, 1);
 
     fread(html_buf, partial->size, 1, input);
@@ -212,6 +213,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     fclose(input);
     free(html_buf);
   } else {
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
     return;
   }
 }
