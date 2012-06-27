@@ -18,7 +18,8 @@
 #define PLUGIN_NAME N_("HtmlView Plug-in")
 #define PLUGIN_DESC N_("Show HTML Mail")
 
-#define GET_RC_BOOLEAN(keyarg) g_key_file_get_boolean(g_opt.rcfile, HTMLVIEW, keyarg, NULL)
+#define GET_RC_BOOLEAN(keyarg) g_key_file_get_boolean(option.rcfile, HTMLVIEW, keyarg, NULL)
+#define SET_RC_BOOLEAN(key, value) g_key_file_set_boolean(option.rcfile, HTMLVIEW, key, value)
 
 typedef struct _HtmlViewOption HtmlViewOption;
 
