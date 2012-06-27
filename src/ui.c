@@ -65,8 +65,12 @@ GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   option.load_image = gtk_check_button_new_with_label(_("Enable auto load image."));
   GtkWidget *image = pack_widget_with_aligned_frame(option.load_image, _("Image"));
 
+  option.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
+  GtkWidget *scripts = pack_widget_with_aligned_frame(option.scripts, _("Scripting"));
+
   gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), scripts, FALSE, FALSE, 0);
 
   GtkWidget *general_lbl = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
