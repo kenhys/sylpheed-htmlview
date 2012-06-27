@@ -34,6 +34,9 @@ struct _HtmlViewOption {
 
   GtkWidget *private_browsing;
   gboolean private_flag;
+
+  GtkWidget *load_image;
+  gboolean image_flag;
   
 };
     
