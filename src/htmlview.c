@@ -83,6 +83,23 @@ static void app_exit_cb(GObject *obj, gpointer data)
 {
 }
 
+void load_option_rcfile(const gchar *rcname)
+{
+  option.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, rcname, NULL);
+  option.rcfile = g_key_file_new();
+  g_key_file_load_from_file(option.rcfile, option.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+}
+
+void save_option_rcfile(void)
+{
+  gsize sz;
+  gchar *buf = g_key_file_to_data(option.rcfile, &sz, NULL);
+  g_file_set_contents(option.rcpath, buf, sz, NULL);
+
+  g_key_file_free(option.rcfile);
+}
+
+
 static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 {
 
