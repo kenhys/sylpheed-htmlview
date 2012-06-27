@@ -20,7 +20,7 @@
 #include "htmlview.h"
 #include "ui.h"
 
-extern HtmlViewOption g_opt;
+extern HtmlViewOption option;
 
 static gchar* g_copyright = N_("HtmlView is distributed under 2-Clause BSD license.\n"
 "\n"
