@@ -60,7 +60,9 @@ GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
 
   option.private_browsing = gtk_check_button_new_with_label(_("Enable private browsing."));
-  pack_widget_with_aligned_frame(option.private_browsing, _("Privacy"));
+  GtkWidget *private = pack_widget_with_aligned_frame(option.private_browsing, _("Privacy"));
+
+  gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
 
   GtkWidget *general_lbl = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
