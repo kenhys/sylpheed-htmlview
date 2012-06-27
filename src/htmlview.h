@@ -37,6 +37,9 @@ struct _HtmlViewOption {
 
   GtkWidget *load_image;
   gboolean image_flag;
+
+  GtkWidget *scripts;
+  gboolean script_flag;
   
 };
     
