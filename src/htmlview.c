@@ -85,7 +85,16 @@ static void app_exit_cb(GObject *obj, gpointer data)
 
 static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 {
+
+#define TOGGLE_STATE(widget) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))
+
+  option.private_flag = TOGGLE_STATE(option.private_browsing);
+  option.image_flag = TOGGLE_STATE(option.load_image);
+  option.script_flag = TOGGLE_STATE(option.scripts);
+
   gtk_widget_destroy(GTK_WIDGET(data));
+
+#undef TOGGLE_STATE
 }
 
 static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
