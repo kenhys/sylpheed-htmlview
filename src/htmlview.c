@@ -107,7 +107,7 @@ static void exec_htmlview_menu_cb(void)
   gtk_window_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
   gtk_window_set_modal(GTK_WINDOW(window), TRUE);
   gtk_window_set_policy(GTK_WINDOW(window), FALSE, TRUE, FALSE);
-  gtk_window_set_default_size(GTK_WINDOW(window), 300, 100);
+  gtk_window_set_default_size(GTK_WINDOW(window), 300, 300);
   gtk_widget_realize(window);
 
   vbox = gtk_vbox_new(FALSE, 6);
