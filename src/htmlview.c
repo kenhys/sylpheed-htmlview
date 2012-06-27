@@ -94,6 +94,20 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 
   gtk_widget_destroy(GTK_WIDGET(data));
 
+  gchar *rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, HTMLVIEWRC, NULL);
+  GKeyFile *keyfile = g_key_file_new();
+  g_key_file_load_from_file(keyfile, rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+  SET_RC_BOOLEAN("enable-private-browsing", option.private_flag);
+  SET_RC_BOOLEAN("auto-load-images", option.image_flag);
+  SET_RC_BOOLEAN("enable-scripts", option.script_flag);
+
+  gsize sz;
+  gchar *buf = g_key_file_to_data(keyfile, &sz, NULL);
+  g_file_set_contents(rcpath, buf, sz, NULL);
+
+  g_key_file_free(keyfile);
+
 #undef TOGGLE_STATE
 }
 
