@@ -4,7 +4,9 @@ HtmlView - HTML mail support plug-in for Sylpheed
 Requirement
 -----------
 
-Ubuntu 12.04 or later
+Sylpheed 3.2.0 or later
+
+recommend to use Ubuntu 12.04 or later.
 
 Install
 -------
