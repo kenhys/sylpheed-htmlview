@@ -32,6 +32,9 @@ struct _HtmlViewOption {
   
   WebKitWebView *html_view;
 
+  GtkWidget *private_browsing;
+  gboolean private_flag;
+  
 };
     
 static void messageview_show_cb(GObject *obj, gpointer msgview,
