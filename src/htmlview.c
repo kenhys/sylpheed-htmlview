@@ -113,19 +113,13 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
   g_print("auto-load-images:%s\n", option.image_flag ? "TRUE" : "FALSE");
   g_print("enable-scripts:%s\n", option.script_flag ? "TRUE" : "FALSE");
 
-  option.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, HTMLVIEWRC, NULL);
-  option.rcfile = g_key_file_new();
-  g_key_file_load_from_file(option.rcfile, option.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
-
+  load_option_rcfile(HTMLVIEWRC);
+  
   SET_RC_BOOLEAN("enable-private-browsing", option.private_flag);
   SET_RC_BOOLEAN("auto-load-images", option.image_flag);
   SET_RC_BOOLEAN("enable-scripts", option.script_flag);
 
-  gsize sz;
-  gchar *buf = g_key_file_to_data(option.rcfile, &sz, NULL);
-  g_file_set_contents(option.rcpath, buf, sz, NULL);
-
-  g_key_file_free(option.rcfile);
+  save_option_rcfile();
 
   gtk_widget_destroy(GTK_WIDGET(data));
 #undef TOGGLE_STATE
