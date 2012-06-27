@@ -204,6 +204,15 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     gchar *html_buf = calloc(partial->size+1, 1);
 
     fread(html_buf, partial->size, 1, input);
+
+    WebKitWebSettings *settings = webkit_web_view_get_settings(option.html_view);
+
+    g_object_set(G_OBJECT(settings), "auto-load-images", option.image_flag, NULL);
+    g_object_set(G_OBJECT(settings), "enable-scripts", option.script_flag, NULL);
+    g_object_set(G_OBJECT(settings), "enable-private-browsing", option.private_flag, NULL);
+
+    webkit_web_view_set_settings(option.html_view, settings);
+
     webkit_web_view_load_string(option.html_view, html_buf, NULL, NULL, "");
     gtk_widget_grab_focus(GTK_WIDGET(option.html_view));
     gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
