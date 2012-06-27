@@ -92,22 +92,25 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
   option.image_flag = TOGGLE_STATE(option.load_image);
   option.script_flag = TOGGLE_STATE(option.scripts);
 
-  gtk_widget_destroy(GTK_WIDGET(data));
+  g_print("enable-private-browsing:%s\n", option.private_flag ? "TRUE" : "FALSE");
+  g_print("auto-load-images:%s\n", option.image_flag ? "TRUE" : "FALSE");
+  g_print("enable-scripts:%s\n", option.script_flag ? "TRUE" : "FALSE");
 
-  gchar *rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, HTMLVIEWRC, NULL);
-  GKeyFile *keyfile = g_key_file_new();
-  g_key_file_load_from_file(keyfile, rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+  option.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, HTMLVIEWRC, NULL);
+  option.rcfile = g_key_file_new();
+  g_key_file_load_from_file(option.rcfile, option.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
   SET_RC_BOOLEAN("enable-private-browsing", option.private_flag);
   SET_RC_BOOLEAN("auto-load-images", option.image_flag);
   SET_RC_BOOLEAN("enable-scripts", option.script_flag);
 
   gsize sz;
-  gchar *buf = g_key_file_to_data(keyfile, &sz, NULL);
-  g_file_set_contents(rcpath, buf, sz, NULL);
+  gchar *buf = g_key_file_to_data(option.rcfile, &sz, NULL);
+  g_file_set_contents(option.rcpath, buf, sz, NULL);
 
-  g_key_file_free(keyfile);
+  g_key_file_free(option.rcfile);
 
+  gtk_widget_destroy(GTK_WIDGET(data));
 #undef TOGGLE_STATE
 }
 
