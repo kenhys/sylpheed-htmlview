@@ -72,6 +72,21 @@ GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), scripts, FALSE, FALSE, 0);
 
+  load_option_rcfile(HTMLVIEWRC);
+
+  option.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
+  option.image_flag = GET_RC_BOOLEAN("auto-load-images");
+  option.script_flag = GET_RC_BOOLEAN("enable-scripts");
+
+#define TOGGLE_STATE(widget, state) \
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), state)
+
+  TOGGLE_STATE(option.private_browsing, option.private_flag);
+  TOGGLE_STATE(option.load_image, option.image_flag);
+  TOGGLE_STATE(option.scripts, option.script_flag);
+
+  save_option_rcfile();
+
   GtkWidget *general_lbl = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
   gtk_widget_show_all(notebook);
