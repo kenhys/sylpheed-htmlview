@@ -27,6 +27,27 @@ static gchar* g_copyright = N_("HtmlView is distributed under 2-Clause BSD licen
 "Copyright (C) 2012 HAYASHI Kentaro <kenhys@gmail.com>"
 			       "\n");
 
+GtkWidget *pack_widget_with_aligned_frame(GtkWidget *widget,
+                                          const gchar *frame_title)
+{
+  GtkWidget *align = gtk_alignment_new(0, 0, 1, 1);
+  gtk_alignment_set_padding(GTK_ALIGNMENT(align),
+                            ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
+
+  GtkWidget *frame = gtk_frame_new(frame_title);
+  GtkWidget *frame_align = gtk_alignment_new(0, 0, 1, 1);
+  gtk_alignment_set_padding(GTK_ALIGNMENT(frame_align),
+                            ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
+
+  gtk_container_add(GTK_CONTAINER(frame_align), widget);
+  gtk_container_add(GTK_CONTAINER(frame), frame_align);
+  gtk_container_add(GTK_CONTAINER(align), frame);
+
+  gtk_widget_show(widget);
+
+  return align;
+}
+
 GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   debug_print("create_config_main_page\n");
