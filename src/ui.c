@@ -18,6 +18,7 @@
 #include "messageview.h"
 #include "procheader.h"
 #include "htmlview.h"
+#include "ui.h"
 
 extern HtmlViewOption g_opt;
 
