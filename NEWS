@@ -1,5 +1,9 @@
 News of htmlview
 
+* 0.2.1 (2012-06-30)
+
+  * fix grab focus problem
+
 * 0.2.0 (2012-06-28)
 
   * added options(enable-private-browsing,auto-load-images,enable-scripts)
