@@ -251,8 +251,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     webkit_web_view_set_settings(option.html_view, settings);
 
     webkit_web_view_load_string(option.html_view, html_buf, NULL, NULL, "");
-    gtk_widget_grab_focus(GTK_WIDGET(option.html_view));
+
     gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
+
+    gtk_widget_grab_focus(GTK_WIDGET(messageview));
 
     fclose(input);
     free(html_buf);
