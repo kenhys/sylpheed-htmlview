@@ -34,6 +34,7 @@ static void init_done_cb(GObject *obj, gpointer data);
 static void app_exit_cb(GObject *obj, gpointer data);
 
 static void exec_htmlview_menu_cb(void);
+static void load_option_from_rcfile(void);
 
 gulong app_exit_handler_id = 0;
 
@@ -56,6 +57,9 @@ void plugin_load(void)
 
   syl_plugin_signal_connect("messageview-show",
                             G_CALLBACK(messageview_show_cb), NULL);
+
+  load_option_from_rcfile();
+  
   g_print("htmlview plug-in loading done\n");
 }
 
@@ -97,6 +101,13 @@ void save_option_rcfile(void)
   g_file_set_contents(option.rcpath, buf, sz, NULL);
 
   g_key_file_free(option.rcfile);
+}
+
+static void load_option_from_rcfile(void)
+{
+  option.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
+  option.image_flag = GET_RC_BOOLEAN("auto-load-images");
+  option.script_flag = GET_RC_BOOLEAN("enable-scripts");
 }
 
 
