@@ -105,9 +105,13 @@ void save_option_rcfile(void)
 
 static void load_option_from_rcfile(void)
 {
+  load_option_rcfile(HTMLVIEWRC);
+
   option.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
   option.image_flag = GET_RC_BOOLEAN("auto-load-images");
   option.script_flag = GET_RC_BOOLEAN("enable-scripts");
+
+  save_option_rcfile();
 }
 
 
