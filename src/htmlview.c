@@ -269,8 +269,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
 
-    gtk_widget_grab_focus(GTK_WIDGET(messageview));
-
     fclose(input);
     free(html_buf);
   } else {
