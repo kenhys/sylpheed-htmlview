@@ -229,35 +229,40 @@ static WebKitWebView *create_htmlview(GtkNotebook *notebook)
 static void messageview_show_cb(GObject *obj, gpointer msgview,
 				MsgInfo *msginfo, gboolean all_headers)
 {
-  g_return_if_fail(msgview != NULL);
+  MessageView *messageview = NULL;
+  MimeInfo *mimeinfo, *partial, *next_partial;
+  FILE *msg_file, *input = NULL;
+  gchar *html_buf = NULL;
+  WebKitWebSettings *settings = NULL;
 
-  MessageView *messageview = (MessageView*)msgview;
+  g_return_if_fail(msgview != NULL);
   g_return_if_fail(messageview != NULL);
 
+  messageview = (MessageView*)msgview;
   if (option.html_view == NULL) {
     option.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
   }
 
-  MimeInfo *mimeinfo = procmime_scan_message(msginfo);
-  FILE *msg_file = procmsg_open_message(msginfo);
+  mimeinfo = procmime_scan_message(msginfo);
+  msg_file = procmsg_open_message(msginfo);
 
-  MimeInfo *partial = mimeinfo;
+  partial = mimeinfo;
   while (partial && partial->mime_type != MIME_TEXT_HTML) {
     partial = procmime_mimeinfo_next(partial);
   }
 
-  MimeInfo *next_partial = NULL;
+  next_partial = NULL;
 
   if (partial && partial->mime_type == MIME_TEXT_HTML) {
     partial->mime_type = MIME_TEXT;
 
-    FILE *input = procmime_get_text_content(partial, msg_file, NULL);
+    input = procmime_get_text_content(partial, msg_file, NULL);
 
-    gchar *html_buf = calloc(partial->size+1, 1);
+    html_buf = calloc(partial->size+1, 1);
 
     fread(html_buf, partial->size, 1, input);
 
-    WebKitWebSettings *settings = webkit_web_view_get_settings(option.html_view);
+    settings = webkit_web_view_get_settings(option.html_view);
 
     g_object_set(G_OBJECT(settings), "auto-load-images", option.image_flag, NULL);
     g_object_set(G_OBJECT(settings), "enable-scripts", option.script_flag, NULL);
