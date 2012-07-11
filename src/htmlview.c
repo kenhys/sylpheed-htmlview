@@ -236,9 +236,11 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   WebKitWebSettings *settings = NULL;
 
   g_return_if_fail(msgview != NULL);
-  g_return_if_fail(messageview != NULL);
 
   messageview = (MessageView*)msgview;
+
+  g_return_if_fail(messageview != NULL);
+
   if (option.html_view == NULL) {
     option.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
   }
