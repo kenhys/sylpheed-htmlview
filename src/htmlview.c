@@ -107,9 +107,9 @@ static void load_option_from_rcfile(void)
 {
   load_option_rcfile(HTMLVIEWRC);
 
-  option.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
-  option.image_flag = GET_RC_BOOLEAN("auto-load-images");
-  option.script_flag = GET_RC_BOOLEAN("enable-scripts");
+  option.private_flag = GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
+  option.image_flag = GET_RC_BOOLEAN(ENABLE_IMAGES);
+  option.script_flag = GET_RC_BOOLEAN(ENABLE_SCRIPTS);
 
   save_option_rcfile();
 }
@@ -124,15 +124,15 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
   option.image_flag = TOGGLE_STATE(option.load_image);
   option.script_flag = TOGGLE_STATE(option.scripts);
 
-  g_print("enable-private-browsing:%s\n", option.private_flag ? "TRUE" : "FALSE");
-  g_print("auto-load-images:%s\n", option.image_flag ? "TRUE" : "FALSE");
-  g_print("enable-scripts:%s\n", option.script_flag ? "TRUE" : "FALSE");
+  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, option.private_flag ? "TRUE" : "FALSE");
+  g_print("%s:%s\n", ENABLE_IMAGES, option.image_flag ? "TRUE" : "FALSE");
+  g_print("%s:%s\n", ENABLE_SCRIPTS, option.script_flag ? "TRUE" : "FALSE");
 
   load_option_rcfile(HTMLVIEWRC);
   
-  SET_RC_BOOLEAN("enable-private-browsing", option.private_flag);
-  SET_RC_BOOLEAN("auto-load-images", option.image_flag);
-  SET_RC_BOOLEAN("enable-scripts", option.script_flag);
+  SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, option.private_flag);
+  SET_RC_BOOLEAN(ENABLE_IMAGES, option.image_flag);
+  SET_RC_BOOLEAN(ENABLE_SCRIPTS, option.script_flag);
 
   save_option_rcfile();
 
@@ -266,9 +266,9 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     settings = webkit_web_view_get_settings(option.html_view);
 
-    g_object_set(G_OBJECT(settings), "auto-load-images", option.image_flag, NULL);
-    g_object_set(G_OBJECT(settings), "enable-scripts", option.script_flag, NULL);
-    g_object_set(G_OBJECT(settings), "enable-private-browsing", option.private_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_IMAGES, option.image_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_SCRIPTS, option.script_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_PRIVATE_BROWSING, option.private_flag, NULL);
 
     webkit_web_view_set_settings(option.html_view, settings);
 
