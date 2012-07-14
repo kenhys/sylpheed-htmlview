@@ -18,6 +18,10 @@
 #define PLUGIN_NAME N_("HtmlView Plug-in")
 #define PLUGIN_DESC N_("Show HTML Mail")
 
+#define ENABLE_PRIVATE_BROWSING "enable-private-browsing"
+#define ENABLE_IMAGES "auto-load-images"
+#define ENABLE_SCRIPTS "enable-scripts"
+
 #define GET_RC_BOOLEAN(keyarg) g_key_file_get_boolean(option.rcfile, HTMLVIEW, keyarg, NULL)
 #define SET_RC_BOOLEAN(key, value) g_key_file_set_boolean(option.rcfile, HTMLVIEW, key, value)
 
