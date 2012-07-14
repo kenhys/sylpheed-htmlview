@@ -230,7 +230,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 				MsgInfo *msginfo, gboolean all_headers)
 {
   MessageView *messageview = NULL;
-  MimeInfo *mimeinfo, *partial, *next_partial;
+  MimeInfo *mimeinfo, *partial;
   FILE *msg_file, *input = NULL;
   gchar *html_buf = NULL;
   WebKitWebSettings *settings = NULL;
@@ -252,8 +252,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   while (partial && partial->mime_type != MIME_TEXT_HTML) {
     partial = procmime_mimeinfo_next(partial);
   }
-
-  next_partial = NULL;
 
   if (partial && partial->mime_type == MIME_TEXT_HTML) {
     partial->mime_type = MIME_TEXT;
