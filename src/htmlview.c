@@ -124,9 +124,9 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
   option.image_flag = TOGGLE_STATE(option.load_image);
   option.script_flag = TOGGLE_STATE(option.scripts);
 
-  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, option.private_flag ? "TRUE" : "FALSE");
-  g_print("%s:%s\n", ENABLE_IMAGES, option.image_flag ? "TRUE" : "FALSE");
-  g_print("%s:%s\n", ENABLE_SCRIPTS, option.script_flag ? "TRUE" : "FALSE");
+  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(option.private_flag));
+  g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(option.image_flag));
+  g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(option.script_flag));
 
   load_option_rcfile(HTMLVIEWRC);
   
