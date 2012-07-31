@@ -1,5 +1,10 @@
 News of htmlview
 
+* 0.3.0 (2012-08-01)
+
+  * depends on show_attach_tab option for rendering HTML
+  * add 'Show HTML as default' option
+
 * 0.2.1 (2012-06-30)
 
   * fix grab focus problem
