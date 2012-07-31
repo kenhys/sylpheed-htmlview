@@ -77,8 +77,9 @@ SylPluginInfo *plugin_info(void)
 
 gint plugin_interface_version(void)
 {
-    return 0x0108;
-    /* return SYL_PLUGIN_INTERFACE_VERSION; */
+  /* return SYL_PLUGIN_INTERFACE_VERSION; */
+  /* Sylpheed 3.3.0Beta1 or later */
+  return 0x0109;
 }
 
 static void init_done_cb(GObject *obj, gpointer data)
