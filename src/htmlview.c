@@ -59,7 +59,9 @@ void plugin_load(void)
                             G_CALLBACK(messageview_show_cb), NULL);
 
   load_option_from_rcfile();
-  
+
+  option.is_show_attach_tab = get_show_attach_tab();
+
   g_print("htmlview plug-in loading done\n");
 }
 
@@ -288,7 +290,9 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     webkit_web_view_load_string(option.html_view, html_buf, NULL, NULL, "");
 
+#if 0
     gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
+#endif
 
     fclose(input);
     free(html_buf);
