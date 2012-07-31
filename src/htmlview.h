@@ -47,7 +47,8 @@ struct _HtmlViewOption {
 
   GtkWidget *scripts;
   gboolean script_flag;
-  
+
+  gint is_show_attach_tab;
 };
     
 static void messageview_show_cb(GObject *obj, gpointer msgview,
