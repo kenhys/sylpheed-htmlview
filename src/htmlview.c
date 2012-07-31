@@ -35,6 +35,7 @@ static void app_exit_cb(GObject *obj, gpointer data);
 
 static void exec_htmlview_menu_cb(void);
 static void load_option_from_rcfile(void);
+static gboolean get_show_attach_tab(void);
 
 gulong app_exit_handler_id = 0;
 
