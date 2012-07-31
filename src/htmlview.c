@@ -144,16 +144,19 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
   option.private_flag = TOGGLE_STATE(option.private_browsing);
   option.image_flag = TOGGLE_STATE(option.load_image);
   option.script_flag = TOGGLE_STATE(option.scripts);
+  option.switch_tab_flag = TOGGLE_STATE(option.switch_tab);
 
   g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(option.private_flag));
   g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(option.image_flag));
   g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(option.script_flag));
+  g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(option.switch_tab_flag));
 
   load_option_rcfile(HTMLVIEWRC);
   
   SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, option.private_flag);
   SET_RC_BOOLEAN(ENABLE_IMAGES, option.image_flag);
   SET_RC_BOOLEAN(ENABLE_SCRIPTS, option.script_flag);
+  SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, option.switch_tab);
 
   save_option_rcfile();
 
