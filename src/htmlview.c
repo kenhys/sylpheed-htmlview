@@ -130,6 +130,7 @@ static void load_option_from_rcfile(void)
   option.private_flag = GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
   option.image_flag = GET_RC_BOOLEAN(ENABLE_IMAGES);
   option.script_flag = GET_RC_BOOLEAN(ENABLE_SCRIPTS);
+  option.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
   save_option_rcfile();
 }
