@@ -87,6 +87,22 @@ static void app_exit_cb(GObject *obj, gpointer data)
 {
 }
 
+#define GET_RC_INT(keyfile, group, key) \
+  g_key_file_get_integer((keyfile), (group), (key), NULL)
+
+static gboolean get_show_attach_tab(void)
+{
+  gint is_show_attach_tab = 0;
+  gchar *rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, "sylpheedrc", NULL);
+  GKeyFile *rcfile = g_key_file_new();
+
+  g_key_file_load_from_file(rcfile, rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+  is_show_attach_tab = GET_RC_INT(rcfile, "Common", "show_attach_tab");
+
+  return is_show_attach_tab;
+}
+
 void load_option_rcfile(const gchar *rcname)
 {
   option.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, rcname, NULL);
