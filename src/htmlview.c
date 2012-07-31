@@ -274,6 +274,9 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 
   if (partial && partial->mime_type == MIME_TEXT_HTML) {
+    
+    option.is_show_attach_tab = get_show_attach_tab();
+
     if (option.is_show_attach_tab == 0) {
       gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
       return;
