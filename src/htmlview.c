@@ -242,7 +242,7 @@ static WebKitWebView *create_htmlview(GtkNotebook *notebook)
   gtk_container_add(GTK_CONTAINER(notebook),
                     GTK_WIDGET(scrolled));
   gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(notebook),
-                                  GTK_WIDGET(scrolled), _("Html"));
+                                  GTK_WIDGET(scrolled), _("HTML"));
   return html_widget;
 }
 
