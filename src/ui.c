@@ -68,15 +68,20 @@ GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   option.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
   GtkWidget *scripts = pack_widget_with_aligned_frame(option.scripts, _("Scripting"));
 
+  option.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
+  GtkWidget *switch_tab = pack_widget_with_aligned_frame(option.switch_tab, _("HTML Tab"));
+
   gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), scripts, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), switch_tab, FALSE, FALSE, 0);
 
   load_option_rcfile(HTMLVIEWRC);
 
   option.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
   option.image_flag = GET_RC_BOOLEAN("auto-load-images");
   option.script_flag = GET_RC_BOOLEAN("enable-scripts");
+  option.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
 #define TOGGLE_STATE(widget, state) \
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), state)
@@ -84,6 +89,7 @@ GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   TOGGLE_STATE(option.private_browsing, option.private_flag);
   TOGGLE_STATE(option.load_image, option.image_flag);
   TOGGLE_STATE(option.scripts, option.script_flag);
+  TOGGLE_STATE(option.switch_tab, option.switch_tab_flag);
 
   save_option_rcfile();
 

@@ -300,9 +300,9 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     webkit_web_view_load_string(option.html_view, html_buf, NULL, NULL, "");
 
-#if 0
-    gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
-#endif
+    if (option.switch_tab_flag != FALSE) {
+      gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
+    }
 
     fclose(input);
     free(html_buf);
