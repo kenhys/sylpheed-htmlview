@@ -11,6 +11,7 @@
 
 #define HTMLVIEW "htmlview"
 #define HTMLVIEWRC "htmlviewrc"
+#define SYLPHEEDRC "sylpheedrc"
 #define _(String)   dgettext(HTMLVIEW, String)
 #define N_(String)  gettext_noop(String)
 #define gettext_noop(String) (String)
