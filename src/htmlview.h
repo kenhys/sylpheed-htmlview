@@ -24,6 +24,7 @@
 #define ENABLE_SCRIPTS "enable-scripts"
 
 #define ENABLE_SWITCH_TAB "switch-tab"
+#define DEFAULT_FONT_SIZE "default-font-size"
 
 #define GET_RC_BOOLEAN(keyarg) g_key_file_get_boolean(option.rcfile, HTMLVIEW, keyarg, NULL)
 #define SET_RC_BOOLEAN(key, value) g_key_file_set_boolean(option.rcfile, HTMLVIEW, key, value)
@@ -55,6 +56,8 @@ struct _HtmlViewOption {
   gboolean switch_tab_flag;
 
   gint is_show_attach_tab;
+
+  gint font_size;
 };
     
 static void messageview_show_cb(GObject *obj, gpointer msgview,
