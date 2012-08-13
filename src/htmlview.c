@@ -123,6 +123,9 @@ void save_option_rcfile(void)
   g_key_file_free(option.rcfile);
 }
 
+#define GET_RC_STRING(keyfile, group, key) \
+  g_key_file_get_string((keyfile), (group), (key), NULL)
+
 static void load_option_from_rcfile(void)
 {
   load_option_rcfile(HTMLVIEWRC);
