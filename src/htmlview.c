@@ -134,6 +134,7 @@ static void load_option_from_rcfile(void)
   gchar **tokens = NULL;
   gchar *token = NULL;
   gint font_size = 0;
+  gint index = 0;
   
   load_option_rcfile(HTMLVIEWRC);
 
@@ -150,12 +151,12 @@ static void load_option_from_rcfile(void)
   font_name = GET_RC_STRING(sylrcfile, "Common", "message_font_name");
 
   tokens = g_strsplit(font_name, " ", 0);
-  for (token = tokens; token != NULL; token++) {
-    if (token + 1 == NULL) {
-      option.font_size = atoi(token);
+  for (index = 0; tokens[index]; index++) {
+    if (tokens[index+1] == NULL) {
+      option.font_size = atoi(tokens[index]);
     }
   }
-  
+  g_strfreev(tokens);
   
   save_option_rcfile();
 }
@@ -324,6 +325,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     g_object_set(G_OBJECT(settings), ENABLE_IMAGES, option.image_flag, NULL);
     g_object_set(G_OBJECT(settings), ENABLE_SCRIPTS, option.script_flag, NULL);
     g_object_set(G_OBJECT(settings), ENABLE_PRIVATE_BROWSING, option.private_flag, NULL);
+
     g_object_set(G_OBJECT(settings), DEFAULT_FONT_SIZE, option.font_size, NULL);
 
     webkit_web_view_set_settings(option.html_view, settings);
