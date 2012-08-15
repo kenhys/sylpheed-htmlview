@@ -91,9 +91,6 @@ static void app_exit_cb(GObject *obj, gpointer data)
 {
 }
 
-#define GET_RC_INT(keyfile, group, key) \
-  g_key_file_get_integer((keyfile), (group), (key), NULL)
-
 static gboolean get_show_attach_tab(void)
 {
   gint is_show_attach_tab = 0;
