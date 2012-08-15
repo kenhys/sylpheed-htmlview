@@ -158,6 +158,8 @@ static void load_option_from_rcfile(void)
   }
   g_strfreev(tokens);
   
+  g_key_file_free(sylrcfile);
+
   save_option_rcfile();
 }
 
