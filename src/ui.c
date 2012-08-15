@@ -50,6 +50,9 @@ GtkWidget *SYLPF_FUNC(pack_widget_with_aligned_frame)(GtkWidget *widget,
 
 GtkWidget *SYLPF_FUNC(create_config_main_page)(GtkWidget *notebook, GKeyFile *pkey)
 {
+  GtkWidget *vbox;
+  GtkWidget *private, *image, *scripts, *switch_tab;
+  
   debug_print("create_config_main_page\n");
   if (notebook == NULL){
     return NULL;
@@ -57,19 +60,19 @@ GtkWidget *SYLPF_FUNC(create_config_main_page)(GtkWidget *notebook, GKeyFile *pk
   /* startup */
   if (pkey!=NULL){
   }
-  GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+  vbox = gtk_vbox_new(FALSE, 6);
 
   option.private_browsing = gtk_check_button_new_with_label(_("Enable private browsing."));
-  GtkWidget *private = pack_widget_with_aligned_frame(option.private_browsing, _("Privacy"));
+  private = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.private_browsing, _("Privacy"));
 
   option.load_image = gtk_check_button_new_with_label(_("Enable auto load image."));
-  GtkWidget *image = pack_widget_with_aligned_frame(option.load_image, _("Image"));
+  image = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.load_image, _("Image"));
 
   option.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
-  GtkWidget *scripts = pack_widget_with_aligned_frame(option.scripts, _("Scripting"));
+  scripts = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.scripts, _("Scripting"));
 
   option.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
-  GtkWidget *switch_tab = pack_widget_with_aligned_frame(option.switch_tab, _("HTML Tab"));
+  switch_tab = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.switch_tab, _("HTML Tab"));
 
   gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
