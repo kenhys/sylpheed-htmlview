@@ -220,9 +220,9 @@ static void exec_htmlview_menu_cb(void)
   /* notebook */ 
   GtkWidget *notebook = gtk_notebook_new();
   /* main tab */
-  create_config_main_page(notebook, option.rcfile);
+  SYLPF_FUNC(create_config_main_page)(notebook, option.rcfile);
   /* about, copyright tab */
-  create_config_about_page(notebook, option.rcfile);
+  SYLPF_FUNC(create_config_about_page)(notebook, option.rcfile);
 
   gtk_widget_show(notebook);
   gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
