@@ -26,10 +26,8 @@
 #define ENABLE_SWITCH_TAB "switch-tab"
 #define DEFAULT_FONT_SIZE "default-font-size"
 
+#define SYLPF_ID HTMLVIEW
 #define SYLPF_OPTION htmlview_option
-
-#define GET_RC_BOOLEAN(keyarg) g_key_file_get_boolean(SYLPF_OPTION.rcfile, HTMLVIEW, keyarg, NULL)
-#define SET_RC_BOOLEAN(key, value) g_key_file_set_boolean(SYLPF_OPTION.rcfile, HTMLVIEW, key, value)
 
 #define SYLPF_FUNC(arg) htmlview ## _ ## arg
 
