@@ -28,7 +28,7 @@ static SylPluginInfo info = {
   N_(PLUGIN_DESC)
 };
 
-HtmlViewOption option;
+HtmlViewOption SYLPF_OPTION;
 
 static void init_done_cb(GObject *obj, gpointer data);
 static void app_exit_cb(GObject *obj, gpointer data);
@@ -61,7 +61,7 @@ void plugin_load(void)
 
   load_option_from_rcfile();
 
-  option.is_show_attach_tab = get_show_attach_tab();
+  SYLPF_OPTION.is_show_attach_tab = get_show_attach_tab();
 
   g_print("htmlview plug-in loading done\n");
 }
@@ -106,18 +106,18 @@ static gboolean get_show_attach_tab(void)
 
 void load_option_rcfile(const gchar *rcname)
 {
-  option.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, rcname, NULL);
-  option.rcfile = g_key_file_new();
-  g_key_file_load_from_file(option.rcfile, option.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
+  SYLPF_OPTION.rcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S, rcname, NULL);
+  SYLPF_OPTION.rcfile = g_key_file_new();
+  g_key_file_load_from_file(SYLPF_OPTION.rcfile, SYLPF_OPTION.rcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
 }
 
 void save_option_rcfile(void)
 {
   gsize sz;
-  gchar *buf = g_key_file_to_data(option.rcfile, &sz, NULL);
-  g_file_set_contents(option.rcpath, buf, sz, NULL);
+  gchar *buf = g_key_file_to_data(SYLPF_OPTION.rcfile, &sz, NULL);
+  g_file_set_contents(SYLPF_OPTION.rcpath, buf, sz, NULL);
 
-  g_key_file_free(option.rcfile);
+  g_key_file_free(SYLPF_OPTION.rcfile);
 }
 
 #define GET_RC_STRING(keyfile, group, key) \
@@ -135,10 +135,10 @@ static void load_option_from_rcfile(void)
   
   load_option_rcfile(HTMLVIEWRC);
 
-  option.private_flag = GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
-  option.image_flag = GET_RC_BOOLEAN(ENABLE_IMAGES);
-  option.script_flag = GET_RC_BOOLEAN(ENABLE_SCRIPTS);
-  option.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
+  SYLPF_OPTION.private_flag = GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
+  SYLPF_OPTION.image_flag = GET_RC_BOOLEAN(ENABLE_IMAGES);
+  SYLPF_OPTION.script_flag = GET_RC_BOOLEAN(ENABLE_SCRIPTS);
+  SYLPF_OPTION.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
   sylrcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S,
                           SYLPHEEDRC, NULL);
@@ -150,7 +150,7 @@ static void load_option_from_rcfile(void)
   tokens = g_strsplit(font_name, " ", 0);
   for (index = 0; tokens[index]; index++) {
     if (tokens[index+1] == NULL) {
-      option.font_size = atoi(tokens[index]);
+      SYLPF_OPTION.font_size = atoi(tokens[index]);
     }
   }
   g_strfreev(tokens);
@@ -166,22 +166,22 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 
 #define TOGGLE_STATE(widget) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))
 
-  option.private_flag = TOGGLE_STATE(option.private_browsing);
-  option.image_flag = TOGGLE_STATE(option.load_image);
-  option.script_flag = TOGGLE_STATE(option.scripts);
-  option.switch_tab_flag = TOGGLE_STATE(option.switch_tab);
+  SYLPF_OPTION.private_flag = TOGGLE_STATE(SYLPF_OPTION.private_browsing);
+  SYLPF_OPTION.image_flag = TOGGLE_STATE(SYLPF_OPTION.load_image);
+  SYLPF_OPTION.script_flag = TOGGLE_STATE(SYLPF_OPTION.scripts);
+  SYLPF_OPTION.switch_tab_flag = TOGGLE_STATE(SYLPF_OPTION.switch_tab);
 
-  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(option.private_flag));
-  g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(option.image_flag));
-  g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(option.script_flag));
-  g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(option.switch_tab_flag));
+  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(SYLPF_OPTION.private_flag));
+  g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(SYLPF_OPTION.image_flag));
+  g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(SYLPF_OPTION.script_flag));
+  g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(SYLPF_OPTION.switch_tab_flag));
 
   load_option_rcfile(HTMLVIEWRC);
   
-  SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, option.private_flag);
-  SET_RC_BOOLEAN(ENABLE_IMAGES, option.image_flag);
-  SET_RC_BOOLEAN(ENABLE_SCRIPTS, option.script_flag);
-  SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, option.switch_tab);
+  SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag);
+  SET_RC_BOOLEAN(ENABLE_IMAGES, SYLPF_OPTION.image_flag);
+  SET_RC_BOOLEAN(ENABLE_SCRIPTS, SYLPF_OPTION.script_flag);
+  SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, SYLPF_OPTION.switch_tab);
 
   save_option_rcfile();
 
@@ -219,9 +219,9 @@ static void exec_htmlview_menu_cb(void)
   /* notebook */ 
   GtkWidget *notebook = gtk_notebook_new();
   /* main tab */
-  SYLPF_FUNC(create_config_main_page)(notebook, option.rcfile);
+  SYLPF_FUNC(create_config_main_page)(notebook, SYLPF_OPTION.rcfile);
   /* about, copyright tab */
-  SYLPF_FUNC(create_config_about_page)(notebook, option.rcfile);
+  SYLPF_FUNC(create_config_about_page)(notebook, SYLPF_OPTION.rcfile);
 
   gtk_widget_show(notebook);
   gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
@@ -290,8 +290,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   g_return_if_fail(messageview != NULL);
 
-  if (option.html_view == NULL) {
-    option.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+  if (SYLPF_OPTION.html_view == NULL) {
+    SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
   }
 
   mimeinfo = procmime_scan_message(msginfo);
@@ -304,9 +304,9 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   if (partial && partial->mime_type == MIME_TEXT_HTML) {
     
-    option.is_show_attach_tab = get_show_attach_tab();
+    SYLPF_OPTION.is_show_attach_tab = get_show_attach_tab();
 
-    if (option.is_show_attach_tab == 0) {
+    if (SYLPF_OPTION.is_show_attach_tab == 0) {
       gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
       return;
     }
@@ -319,19 +319,19 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     fread(html_buf, partial->size, 1, input);
 
-    settings = webkit_web_view_get_settings(option.html_view);
+    settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
 
-    g_object_set(G_OBJECT(settings), ENABLE_IMAGES, option.image_flag, NULL);
-    g_object_set(G_OBJECT(settings), ENABLE_SCRIPTS, option.script_flag, NULL);
-    g_object_set(G_OBJECT(settings), ENABLE_PRIVATE_BROWSING, option.private_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_IMAGES, SYLPF_OPTION.image_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_SCRIPTS, SYLPF_OPTION.script_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag, NULL);
 
-    g_object_set(G_OBJECT(settings), DEFAULT_FONT_SIZE, option.font_size, NULL);
+    g_object_set(G_OBJECT(settings), DEFAULT_FONT_SIZE, SYLPF_OPTION.font_size, NULL);
 
-    webkit_web_view_set_settings(option.html_view, settings);
+    webkit_web_view_set_settings(SYLPF_OPTION.html_view, settings);
 
-    webkit_web_view_load_string(option.html_view, html_buf, NULL, NULL, "");
+    webkit_web_view_load_string(SYLPF_OPTION.html_view, html_buf, NULL, NULL, "");
 
-    if (option.switch_tab_flag != FALSE) {
+    if (SYLPF_OPTION.switch_tab_flag != FALSE) {
       gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
     }
 

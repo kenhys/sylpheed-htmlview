@@ -20,7 +20,7 @@
 #include "htmlview.h"
 #include "ui.h"
 
-extern HtmlViewOption option;
+extern HtmlViewOption SYLPF_OPTION;
 
 static gchar* g_copyright = N_("HtmlView is distributed under 2-Clause BSD license.\n"
 "\n"
@@ -62,17 +62,17 @@ GtkWidget *SYLPF_FUNC(create_config_main_page)(GtkWidget *notebook, GKeyFile *pk
   }
   vbox = gtk_vbox_new(FALSE, 6);
 
-  option.private_browsing = gtk_check_button_new_with_label(_("Enable private browsing."));
-  private = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.private_browsing, _("Privacy"));
+  SYLPF_OPTION.private_browsing = gtk_check_button_new_with_label(_("Enable private browsing."));
+  private = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.private_browsing, _("Privacy"));
 
-  option.load_image = gtk_check_button_new_with_label(_("Enable auto load image."));
-  image = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.load_image, _("Image"));
+  SYLPF_OPTION.load_image = gtk_check_button_new_with_label(_("Enable auto load image."));
+  image = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.load_image, _("Image"));
 
-  option.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
-  scripts = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.scripts, _("Scripting"));
+  SYLPF_OPTION.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
+  scripts = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.scripts, _("Scripting"));
 
-  option.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
-  switch_tab = SYLPF_FUNC(pack_widget_with_aligned_frame)(option.switch_tab, _("HTML Tab"));
+  SYLPF_OPTION.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
+  switch_tab = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.switch_tab, _("HTML Tab"));
 
   gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
@@ -81,18 +81,18 @@ GtkWidget *SYLPF_FUNC(create_config_main_page)(GtkWidget *notebook, GKeyFile *pk
 
   load_option_rcfile(HTMLVIEWRC);
 
-  option.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
-  option.image_flag = GET_RC_BOOLEAN("auto-load-images");
-  option.script_flag = GET_RC_BOOLEAN("enable-scripts");
-  option.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
+  SYLPF_OPTION.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
+  SYLPF_OPTION.image_flag = GET_RC_BOOLEAN("auto-load-images");
+  SYLPF_OPTION.script_flag = GET_RC_BOOLEAN("enable-scripts");
+  SYLPF_OPTION.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
 #define TOGGLE_STATE(widget, state) \
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), state)
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.widget), SYLPF_OPTION.state)
 
-  TOGGLE_STATE(option.private_browsing, option.private_flag);
-  TOGGLE_STATE(option.load_image, option.image_flag);
-  TOGGLE_STATE(option.scripts, option.script_flag);
-  TOGGLE_STATE(option.switch_tab, option.switch_tab_flag);
+  TOGGLE_STATE(private_browsing, private_flag);
+  TOGGLE_STATE(load_image, image_flag);
+  TOGGLE_STATE(scripts, script_flag);
+  TOGGLE_STATE(switch_tab, switch_tab_flag);
 
   save_option_rcfile();
 
