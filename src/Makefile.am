@@ -17,7 +17,8 @@ INCLUDES = \
 	-I$(includedir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libsylph \
-	-I$(top_srcdir)/src
+	-I$(top_srcdir)/src \
+	-I$(sylpf_srcdir)
 
 htmlview_la_LIBADD = \
 	$(GTK_LIBS) \
