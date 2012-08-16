@@ -20,6 +20,7 @@
 #include "messageview.h"
 #include "procheader.h"
 #include "htmlview.h"
+#include "sylpf_utility.h"
 
 static SylPluginInfo info = {
   N_(PLUGIN_NAME),
@@ -35,7 +36,6 @@ static void app_exit_cb(GObject *obj, gpointer data);
 
 static void exec_htmlview_menu_cb(void);
 static void load_option_from_rcfile(void);
-static gboolean get_show_attach_tab(void);
 
 gulong app_exit_handler_id = 0;
 
@@ -61,7 +61,7 @@ void plugin_load(void)
 
   load_option_from_rcfile();
 
-  SYLPF_OPTION.is_show_attach_tab = get_show_attach_tab();
+  SYLPF_OPTION.is_show_attach_tab = SYLPF_GET_RC_SHOW_ATTACH_TAB;
 
   g_print("htmlview plug-in loading done\n");
 }
@@ -292,7 +292,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   if (partial && partial->mime_type == MIME_TEXT_HTML) {
     
-    SYLPF_OPTION.is_show_attach_tab = get_show_attach_tab();
+    SYLPF_OPTION.is_show_attach_tab = SYLPF_GET_RC_SHOW_ATTACH_TAB;
 
     if (SYLPF_OPTION.is_show_attach_tab == 0) {
       gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
