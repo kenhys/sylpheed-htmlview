@@ -108,9 +108,6 @@ void save_option_rcfile(void)
   g_key_file_free(SYLPF_OPTION.rcfile);
 }
 
-#define GET_RC_STRING(keyfile, group, key) \
-  g_key_file_get_string((keyfile), (group), (key), NULL)
-
 static void load_option_from_rcfile(void)
 {
   const gchar *sylrcpath = NULL;
@@ -123,17 +120,17 @@ static void load_option_from_rcfile(void)
   
   load_option_rcfile(HTMLVIEWRC);
 
-  SYLPF_OPTION.private_flag = GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
-  SYLPF_OPTION.image_flag = GET_RC_BOOLEAN(ENABLE_IMAGES);
-  SYLPF_OPTION.script_flag = GET_RC_BOOLEAN(ENABLE_SCRIPTS);
-  SYLPF_OPTION.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
+  SYLPF_OPTION.private_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
+  SYLPF_OPTION.image_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_IMAGES);
+  SYLPF_OPTION.script_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SCRIPTS);
+  SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
   sylrcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S,
                           SYLPHEEDRC, NULL);
   sylrcfile = g_key_file_new();
   g_key_file_load_from_file(sylrcfile, sylrcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
   
-  font_name = GET_RC_STRING(sylrcfile, "Common", "message_font_name");
+  font_name = SYLPF_GET_RC_STRING(sylrcfile, "Common", "message_font_name");
 
   tokens = g_strsplit(font_name, " ", 0);
   for (index = 0; tokens[index]; index++) {
