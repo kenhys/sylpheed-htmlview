@@ -19,6 +19,7 @@
 #include "procheader.h"
 #include "htmlview.h"
 #include "ui.h"
+#include "sylpf_utility.h"
 
 extern HtmlViewOption SYLPF_OPTION;
 
