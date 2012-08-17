@@ -81,10 +81,10 @@ GtkWidget *SYLPF_FUNC(create_config_main_page)(GtkWidget *notebook, GKeyFile *pk
 
   load_option_rcfile(HTMLVIEWRC);
 
-  SYLPF_OPTION.private_flag = GET_RC_BOOLEAN("enable-private-browsing");
-  SYLPF_OPTION.image_flag = GET_RC_BOOLEAN("auto-load-images");
-  SYLPF_OPTION.script_flag = GET_RC_BOOLEAN("enable-scripts");
-  SYLPF_OPTION.switch_tab_flag = GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
+  SYLPF_OPTION.private_flag = SYLPF_GET_RC_BOOLEAN("enable-private-browsing");
+  SYLPF_OPTION.image_flag = SYLPF_GET_RC_BOOLEAN("auto-load-images");
+  SYLPF_OPTION.script_flag = SYLPF_GET_RC_BOOLEAN("enable-scripts");
+  SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
 #define TOGGLE_STATE(widget, state) \
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.widget), SYLPF_OPTION.state)
