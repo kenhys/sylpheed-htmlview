@@ -130,7 +130,7 @@ static void load_option_from_rcfile(void)
   sylrcfile = g_key_file_new();
   g_key_file_load_from_file(sylrcfile, sylrcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
   
-  font_name = SYLPF_GET_RC_STRING(sylrcfile, "Common", "message_font_name");
+  font_name = SYLPF_GET_RC_MESSAGE_FONT_NAME;
 
   tokens = g_strsplit(font_name, " ", 0);
   for (index = 0; tokens[index]; index++) {
