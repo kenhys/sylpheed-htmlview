@@ -125,11 +125,6 @@ static void load_option_from_rcfile(void)
   SYLPF_OPTION.script_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SCRIPTS);
   SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
-  sylrcpath = g_strconcat(get_rc_dir(), G_DIR_SEPARATOR_S,
-                          SYLPHEEDRC, NULL);
-  sylrcfile = g_key_file_new();
-  g_key_file_load_from_file(sylrcfile, sylrcpath, G_KEY_FILE_KEEP_COMMENTS, NULL);
-  
   font_name = SYLPF_GET_RC_MESSAGE_FONT_NAME;
 
   tokens = g_strsplit(font_name, " ", 0);
@@ -139,8 +134,7 @@ static void load_option_from_rcfile(void)
     }
   }
   g_strfreev(tokens);
-  
-  g_key_file_free(sylrcfile);
+  g_free(font_name);
 
   save_option_rcfile();
 }
