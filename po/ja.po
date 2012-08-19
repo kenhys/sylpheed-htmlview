@@ -8,46 +8,78 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-18 22:07+0900\n"
+"POT-Creation-Date: 2012-08-19 14:29+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: HAYASHI Kentaro <kenhys@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/htmlview.c:46
+#: src/htmlview.c:50
 msgid "HtmlView [htmlview]"
 msgstr ""
 
-#: src/htmlview.c:133 src/htmlview.c:201
+#: src/htmlview.c:229
 msgid "HtmlView"
 msgstr ""
 
-#: src/htmlview.c:133
-msgid "does not support multiple MH folder"
+#: src/htmlview.c:253
+msgid "HTML"
 msgstr ""
 
-#: src/htmlview.h:16
+#: src/htmlview.h:19
 msgid "HtmlView Plug-in"
 msgstr ""
 
-#: src/htmlview.h:17
+#: src/htmlview.h:20
 msgid "Show HTML Mail"
 msgstr ""
 
-#: src/ui.c:24
+#: src/ui.c:26
 msgid ""
 "HtmlView is distributed under 2-Clause BSD license.\n"
 "\n"
 "Copyright (C) 2012 HAYASHI Kentaro <kenhys@gmail.com>\n"
 msgstr ""
 
-#: src/ui.c:40
-msgid "General"
-msgstr ""
+#: src/ui.c:66
+msgid "Enable private browsing."
+msgstr "プライベートブラウジングを有効化する"
+
+#: src/ui.c:67
+msgid "Privacy"
+msgstr "プライバシー"
+
+#: src/ui.c:69
+msgid "Enable auto load image."
+msgstr "画像を自動的に読み込む"
+
+#: src/ui.c:70
+msgid "Image"
+msgstr "画像"
+
+#: src/ui.c:72
+msgid "Enable scripts."
+msgstr "スクリプトを有効化"
+
+#: src/ui.c:73
+msgid "Scripting"
+msgstr "スクリプト"
 
 #: src/ui.c:75
+msgid "Show HTML tab as default."
+msgstr "HTMLタブをデフォルトで表示する"
+
+#: src/ui.c:76
+msgid "HTML Tab"
+msgstr "HTMLタブ"
+
+#: src/ui.c:100
+msgid "General"
+msgstr "設定"
+
+#: src/ui.c:135
 msgid "About"
-msgstr ""
+msgstr "情報"
