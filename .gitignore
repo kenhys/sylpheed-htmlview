@@ -7,4 +7,5 @@ private_build.h
 .compile
 .deps
 .libs
+*.cache
 Makefile
