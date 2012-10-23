@@ -6,7 +6,7 @@ AC_INIT([htmlview], [0.4.0], [kenhys@gmail.com])
 AC_CONFIG_SRCDIR([src/ui.c])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_MACRO_DIR([m4 ../sylplugin_factory/m4])
+AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
 
