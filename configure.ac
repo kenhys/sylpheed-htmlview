@@ -30,8 +30,20 @@ AC_ARG_ENABLE([webkitgtk],
               [enable_webkitgtk=yes]
 )
 
-AS_IF([test "x$enable_webkitgtk" != xno],
-    [AC_DEFINE([USE_WEBKITGTK], [1], [WebKitGTK support])]
+AC_ARG_ENABLE([gtkhtml],
+	      [AS_HELP_STRING([--enable-gtkhtml],
+                              [use GtkHTML as HTML rendering engine. [default=no]])],
+              [],
+              [enable_gtkhtml=no]
+)
+
+AS_IF([test "x$enable_webkitgtk" != xno && test "x$enable_gtkhtml" != xno],
+      [AC_DEFINE([USE_GTKHTML], [1], [GtkHTML support])],
+      [test "x$enable_webkitgtk" != xno && test "x$enable_gtkhtml" != xyes],
+      [AC_DEFINE([USE_WEBKITGTK], [1], [WebKitGTK support])],
+      [test "x$enable_webkitgtk" != xyes && test "x$enable_gtkhtml" != xno],
+      [AC_DEFINE([USE_GTKHTML], [1], [GtkHTML support])],
+      [AC_MSG_ERROR(use WebKitGTK or GtkHTML exclusively.)]
 )
 
 # Checks for header files.
