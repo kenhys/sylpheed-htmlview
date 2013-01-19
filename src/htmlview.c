@@ -6,8 +6,12 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#if defined(USE_WEBKITGTK)
 #include <webkit/webkit.h>
 #include <webkit/webkitwebview.h>
+#elif defined(USE_GTKHTML)
+#include <gtkhtml.h>
+#endif
 
 #include "sylmain.h"
 #include "plugin.h"
