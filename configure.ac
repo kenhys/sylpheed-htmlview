@@ -23,6 +23,17 @@ AM_PATH_GTK_2_0(2.8.0,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' for 
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
+AC_ARG_ENABLE([webkitgtk],
+	      [AS_HELP_STRING([--enable-webkitgtk],
+                              [use WebKitGTK as HTML rendering engine. [default=yes]])],
+              [],
+              [enable_webkitgtk=yes]
+)
+
+AS_IF([test "x$enable_webkitgtk" != xno],
+    [AC_DEFINE([USE_WEBKITGTK], [1], [WebKitGTK support])]
+)
+
 # Checks for header files.
 m4_include(../sylplugin_factory/m4/sylplugin_factory.m4)
 # Checks for typedefs, structures, and compiler characteristics.
