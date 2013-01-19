@@ -25,9 +25,9 @@ AC_SUBST(GTK_LIBS)
 
 AC_ARG_ENABLE([webkitgtk],
 	      [AS_HELP_STRING([--enable-webkitgtk],
-                              [use WebKitGTK as HTML rendering engine. [default=yes]])],
+                              [use WebKitGTK as HTML rendering engine. [default=no]])],
               [],
-              [enable_webkitgtk=yes]
+              [enable_webkitgtk=no]
 )
 
 AC_ARG_ENABLE([gtkhtml],
