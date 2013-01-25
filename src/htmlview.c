@@ -240,10 +240,14 @@ static void exec_htmlview_menu_cb(void)
 
 }
 
-static WebKitWebView *create_htmlview(GtkNotebook *notebook)
+static GtkWidget *create_htmlview(GtkNotebook *notebook)
 {
 
+#if defined(USE_WEBKITGTK)
   WebKitWebView *html_widget = WEBKIT_WEB_VIEW(webkit_web_view_new());
+#elif defined(USE_GTKHTML)
+  GtkWidget *html_widget = gtk_html_new();
+#endif
 
   GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled),
@@ -255,7 +259,7 @@ static WebKitWebView *create_htmlview(GtkNotebook *notebook)
                     GTK_WIDGET(scrolled));
   gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(notebook),
                                   GTK_WIDGET(scrolled), _("HTML"));
-  return html_widget;
+  return GTK_WIDGET(html_widget);
 }
 
 static void messageview_show_cb(GObject *obj, gpointer msgview,
@@ -265,7 +269,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   MimeInfo *mimeinfo, *partial;
   FILE *msg_file, *input = NULL;
   gchar *html_buf = NULL;
+#if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
+#elif defined(USE_GTKHTML)
+#endif
 
   g_return_if_fail(msgview != NULL);
 
@@ -302,6 +309,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     fread(html_buf, partial->size, 1, input);
 
+#if defined(USE_WEBKITGTK)
     settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
 
     g_object_set(G_OBJECT(settings), ENABLE_IMAGES, SYLPF_OPTION.image_flag, NULL);
@@ -313,6 +321,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     webkit_web_view_set_settings(SYLPF_OPTION.html_view, settings);
 
     webkit_web_view_load_string(SYLPF_OPTION.html_view, html_buf, NULL, NULL, "");
+
+#elif defined(USE_GTKHTML)
+    gtk_html_load_from_string(GTK_HTML(SYLPF_OPTION.html_view), html_buf, -1);
+#endif
 
     if (SYLPF_OPTION.switch_tab_flag != FALSE) {
       gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
