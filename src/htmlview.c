@@ -48,6 +48,9 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_preference_dialog(HtmlViewOption *option);
 
+static void apply_htmlview_preference(HtmlViewOption *option);
+static void save_htmlview_preference(HtmlViewOption *option);
+
 gulong app_exit_handler_id = 0;
 
 #if defined(USE_WEBKITGTK)
@@ -157,21 +160,12 @@ static void load_option_from_rcfile(void)
 }
 
 
-static void prefs_ok_cb(GtkWidget *widget, gpointer data)
+static void save_htmlview_preference(HtmlViewOption *option)
 {
+  SYLPF_START_FUNC;
 
-#define TOGGLE_STATE(widget) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))
-
-  SYLPF_OPTION.private_flag = TOGGLE_STATE(SYLPF_OPTION.private_browsing);
-  SYLPF_OPTION.image_flag = TOGGLE_STATE(SYLPF_OPTION.load_image);
-  SYLPF_OPTION.script_flag = TOGGLE_STATE(SYLPF_OPTION.scripts);
-  SYLPF_OPTION.switch_tab_flag = TOGGLE_STATE(SYLPF_OPTION.switch_tab);
-
-  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(SYLPF_OPTION.private_flag));
-  g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(SYLPF_OPTION.image_flag));
-  g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(SYLPF_OPTION.script_flag));
-  g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(SYLPF_OPTION.switch_tab_flag));
-
+  apply_htmlview_preference(option);
+  
   load_option_rcfile(HTMLVIEWRC);
   
   SYLPF_SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag);
@@ -181,13 +175,25 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 
   save_option_rcfile();
 
-  gtk_widget_destroy(GTK_WIDGET(data));
-#undef TOGGLE_STATE
 }
 
 static void apply_htmlview_preference(HtmlViewOption *option)
 {
   SYLPF_START_FUNC;
+
+#define TOGGLE_STATE(widget) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))
+
+  option->private_flag = TOGGLE_STATE(option->private_browsing);
+  option->image_flag = TOGGLE_STATE(option->load_image);
+  option->script_flag = TOGGLE_STATE(option->scripts);
+  option->switch_tab_flag = TOGGLE_STATE(option->switch_tab);
+
+  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(option->private_flag));
+  g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(option->image_flag));
+  g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(option->script_flag));
+  g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(option->switch_tab_flag));
+
+#undef TOGGLE_STATE
 
   SYLPF_END_FUNC;
 }
