@@ -5,6 +5,7 @@
  */
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <libintl.h>
 #if defined(USE_WEBKITGTK)
