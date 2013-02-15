@@ -43,8 +43,6 @@ static void app_exit_cb(GObject *obj, gpointer data);
 static void exec_htmlview_menu_cb(void);
 static void load_option_from_rcfile(void);
 
-static GtkWidget *pack_widget_with_aligned_frame(GtkWidget *widget,
-                                                 const gchar *frame_title);
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
 
@@ -350,29 +348,6 @@ static gchar* g_copyright = N_("HtmlView is distributed under 2-Clause BSD licen
 "Copyright (C) 2012 HAYASHI Kentaro <kenhys@gmail.com>"
 			       "\n");
 
-static GtkWidget *pack_widget_with_aligned_frame(GtkWidget *widget,
-                                          const gchar *frame_title)
-{
-  GtkWidget *align = gtk_alignment_new(0, 0, 1, 1);
-  gtk_alignment_set_padding(GTK_ALIGNMENT(align),
-                            SYLPF_ALIGN_TOP, SYLPF_ALIGN_BOTTOM,
-                            SYLPF_ALIGN_LEFT, SYLPF_ALIGN_RIGHT);
-
-  GtkWidget *frame = gtk_frame_new(frame_title);
-  GtkWidget *frame_align = gtk_alignment_new(0, 0, 1, 1);
-  gtk_alignment_set_padding(GTK_ALIGNMENT(frame_align),
-                            SYLPF_ALIGN_TOP, SYLPF_ALIGN_BOTTOM,
-                            SYLPF_ALIGN_LEFT, SYLPF_ALIGN_RIGHT);
-
-  gtk_container_add(GTK_CONTAINER(frame_align), widget);
-  gtk_container_add(GTK_CONTAINER(frame), frame_align);
-  gtk_container_add(GTK_CONTAINER(align), frame);
-
-  gtk_widget_show(widget);
-
-  return align;
-}
-
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
@@ -388,16 +363,16 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   vbox = gtk_vbox_new(FALSE, 6);
 
   SYLPF_OPTION.private_browsing = gtk_check_button_new_with_label(_("Enable private browsing."));
-  private = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.private_browsing, _("Privacy"));
+  private = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.private_browsing, _("Privacy"));
 
   SYLPF_OPTION.load_image = gtk_check_button_new_with_label(_("Enable auto load image."));
-  image = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.load_image, _("Image"));
+  image = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.load_image, _("Image"));
 
   SYLPF_OPTION.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
-  scripts = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.scripts, _("Scripting"));
+  scripts = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.scripts, _("Scripting"));
 
   SYLPF_OPTION.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
-  switch_tab = SYLPF_FUNC(pack_widget_with_aligned_frame)(SYLPF_OPTION.switch_tab, _("HTML Tab"));
+  switch_tab = pack_widget_with_aligned_frame(SYLPF_OPTION.switch_tab, _("HTML Tab"));
 
   gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
