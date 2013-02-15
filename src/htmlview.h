@@ -38,6 +38,8 @@ typedef struct _HtmlViewOption HtmlViewOption;
 struct _HtmlViewOption {
   /* General section */
 
+  GtkWidget *window;
+
   /* full path to ghostbiffrc*/
   gchar *rcpath;
   /* rcfile */
