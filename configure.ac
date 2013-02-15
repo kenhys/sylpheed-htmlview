@@ -63,6 +63,25 @@ AS_IF([test "x$enable_webkitgtk" != xno && test "x$enable_gtkhtml" != xno],
       [AC_MSG_ERROR(use WebKitGTK or GtkHTML exclusively.)]
 )
 
+# For debug
+AC_ARG_ENABLE(debug,
+	      [AS_HELP_STRING([--enable-debug],
+                              [use debug flags (default=no)])],
+  [plugin_debug="$enableval"],
+  [plugin_debug="no"])
+if test "x$plugin_debug" != "xno"; then
+  plugin_debug="yes"
+  if test "$CLANG" = "yes"; then
+    CFLAGS="$CFLAGS -O0 -g"
+    CXXFLAGS="$CXXFLAGS -O0 -g"
+  elif test "$GCC" = "yes"; then
+    CFLAGS="$CFLAGS -O0 -ggdb3"
+    CXXFLAGS="$CXXFLAGS -O0 -ggdb3"
+  fi
+fi
+AC_SUBST(plugin_debug)
+
+
 # Checks for header files.
 m4_include(../sylplugin_factory/m4/sylplugin_factory.m4)
 # Checks for typedefs, structures, and compiler characteristics.
