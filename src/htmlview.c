@@ -185,9 +185,11 @@ static void prefs_ok_cb(GtkWidget *widget, gpointer data)
 #undef TOGGLE_STATE
 }
 
-static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
+static void apply_htmlview_preference(HtmlViewOption *option)
 {
-  gtk_widget_destroy(GTK_WIDGET(data));
+  SYLPF_START_FUNC;
+
+  SYLPF_END_FUNC;
 }
 
 static void exec_htmlview_menu_cb(void)
@@ -270,8 +272,7 @@ static GtkWidget *create_preference_dialog(HtmlViewOption *option)
 
   gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), SYLPF_BOX_SPACE);
 
-  SYLPF_END_FUNC;
-  return dialog;
+  SYLPF_RETURN_VALUE(dialog);
 }
 
 static GtkWidget *create_htmlview(GtkNotebook *notebook)
@@ -297,9 +298,7 @@ static GtkWidget *create_htmlview(GtkNotebook *notebook)
   gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(notebook),
                                   GTK_WIDGET(scrolled), _("HTML"));
 
-  SYLPF_END_FUNC;
-
-  return GTK_WIDGET(html_widget);
+  SYLPF_RETURN_VALUE(GTK_WIDGET(html_widget));
 }
 
 static void messageview_show_cb(GObject *obj, gpointer msgview,
@@ -327,7 +326,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   if (SYLPF_OPTION.is_show_attach_tab == 0) {
     gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
-    return;
+    SYLPF_RETURN;
   }
 
   if (SYLPF_OPTION.html_view == NULL) {
@@ -434,9 +433,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
   gtk_widget_show_all(notebook);
 
-  SYLPF_END_FUNC;
-
-  return vbox;
+  SYLPF_RETURN_VALUE(vbox);
 }
 
 /* about, copyright tab */
