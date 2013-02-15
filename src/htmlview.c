@@ -292,6 +292,13 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   g_return_if_fail(messageview != NULL);
 
+  SYLPF_OPTION.is_show_attach_tab = SYLPF_GET_RC_SHOW_ATTACH_TAB;
+
+  if (SYLPF_OPTION.is_show_attach_tab == 0) {
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
+    return;
+  }
+
   if (SYLPF_OPTION.html_view == NULL) {
     SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
   }
@@ -306,13 +313,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   if (partial && partial->mime_type == MIME_TEXT_HTML) {
     
-    SYLPF_OPTION.is_show_attach_tab = SYLPF_GET_RC_SHOW_ATTACH_TAB;
-
-    if (SYLPF_OPTION.is_show_attach_tab == 0) {
-      gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
-      return;
-    }
-
     partial->mime_type = MIME_TEXT;
 
     input = procmime_get_text_content(partial, msg_file, NULL);
