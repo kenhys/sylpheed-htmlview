@@ -25,10 +25,16 @@ AC_SUBST(GTK_LIBS)
 
 AC_ARG_ENABLE([webkitgtk],
 	      [AS_HELP_STRING([--enable-webkitgtk],
-                              [use WebKitGTK as HTML rendering engine. [default=no]])],
-              [],
+                              [use WebKitGTK as HTML rendering engine. [default=auto]])],
+              [enable_webkitgtk="$enableval"],
               [enable_webkitgtk=no]
 )
+
+AC_MSG_CHECKING([whether enable WebKitGTK])
+if test "x$enable_webkitgtk" != "xyes"; then
+  enable_webkitgtk="no"
+fi
+AC_MSG_RESULT($enable_webkitgtk)
 
 AC_ARG_ENABLE([gtkhtml],
 	      [AS_HELP_STRING([--enable-gtkhtml],
