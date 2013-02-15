@@ -48,7 +48,6 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_preference_dialog(HtmlViewOption *option);
 
-static void apply_htmlview_preference(HtmlViewOption *option);
 static void save_htmlview_preference(HtmlViewOption *option);
 
 gulong app_exit_handler_id = 0;
@@ -164,23 +163,6 @@ static void save_htmlview_preference(HtmlViewOption *option)
 {
   SYLPF_START_FUNC;
 
-  apply_htmlview_preference(option);
-  
-  load_option_rcfile(HTMLVIEWRC);
-  
-  SYLPF_SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag);
-  SYLPF_SET_RC_BOOLEAN(ENABLE_IMAGES, SYLPF_OPTION.image_flag);
-  SYLPF_SET_RC_BOOLEAN(ENABLE_SCRIPTS, SYLPF_OPTION.script_flag);
-  SYLPF_SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, SYLPF_OPTION.switch_tab_flag);
-
-  save_option_rcfile();
-
-}
-
-static void apply_htmlview_preference(HtmlViewOption *option)
-{
-  SYLPF_START_FUNC;
-
 #define TOGGLE_STATE(widget) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))
 
   option->private_flag = TOGGLE_STATE(option->private_browsing);
@@ -194,8 +176,16 @@ static void apply_htmlview_preference(HtmlViewOption *option)
   g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(option->switch_tab_flag));
 
 #undef TOGGLE_STATE
+  
+  load_option_rcfile(HTMLVIEWRC);
+  
+  SYLPF_SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag);
+  SYLPF_SET_RC_BOOLEAN(ENABLE_IMAGES, SYLPF_OPTION.image_flag);
+  SYLPF_SET_RC_BOOLEAN(ENABLE_SCRIPTS, SYLPF_OPTION.script_flag);
+  SYLPF_SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, SYLPF_OPTION.switch_tab_flag);
 
-  SYLPF_END_FUNC;
+  save_option_rcfile();
+
 }
 
 static void exec_htmlview_menu_cb(void)
@@ -211,9 +201,6 @@ static void exec_htmlview_menu_cb(void)
   response = gtk_dialog_run(GTK_DIALOG(dialog));
 
   switch (response) {
-  case GTK_RESPONSE_APPLY:
-    apply_htmlview_preference(&SYLPF_OPTION);
-    break;
   case GTK_RESPONSE_OK:
     save_htmlview_preference(&SYLPF_OPTION);
     break;
@@ -250,7 +237,6 @@ static GtkWidget *create_preference_dialog(HtmlViewOption *option)
   dialog = gtk_dialog_new_with_buttons(_("HtmlView"),
                                        GTK_WINDOW(window),
                                        GTK_DIALOG_MODAL,
-                                       GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                        GTK_STOCK_OK, GTK_RESPONSE_OK,
                                        NULL);
