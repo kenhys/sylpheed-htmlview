@@ -27,6 +27,7 @@
 #include "procheader.h"
 #include "htmlview.h"
 #include "sylplugin_factory.h"
+#include "copying.h"
 
 static SylPluginInfo info = {
   N_(PLUGIN_NAME),
@@ -365,11 +366,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 }
 
-static gchar* g_copyright = N_("HtmlView is distributed under 2-Clause BSD license.\n"
-"\n"
-"Copyright (C) 2012 HAYASHI Kentaro <kenhys@gmail.com>"
-			       "\n");
-
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
@@ -446,7 +442,7 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
 
   GtkTextBuffer *tbuffer = gtk_text_buffer_new(NULL);
-  gtk_text_buffer_set_text(tbuffer, _(g_copyright), strlen(g_copyright));
+  gtk_text_buffer_set_text(tbuffer, _(copyright), strlen(copyright));
   GtkWidget *tview = gtk_text_view_new_with_buffer(tbuffer);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), FALSE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
