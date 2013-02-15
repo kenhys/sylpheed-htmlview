@@ -48,6 +48,12 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
 
 gulong app_exit_handler_id = 0;
 
+#if defined(USE_WEBKITGTK)
+#elif defined(USE_GTKHTML)
+#else
+#error "use WebKitGTK or GtkHTML"
+#endif
+
 void plugin_load(void)
 {
   gpointer mainwin;
