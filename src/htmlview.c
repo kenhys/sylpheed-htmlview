@@ -42,6 +42,11 @@ static void app_exit_cb(GObject *obj, gpointer data);
 static void exec_htmlview_menu_cb(void);
 static void load_option_from_rcfile(void);
 
+static GtkWidget *pack_widget_with_aligned_frame(GtkWidget *widget,
+                                                 const gchar *frame_title);
+static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
+
 gulong app_exit_handler_id = 0;
 
 void plugin_load(void)
