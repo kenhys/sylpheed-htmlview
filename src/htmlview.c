@@ -283,6 +283,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
+#error "Not Implemented"
 #endif
 
   g_return_if_fail(msgview != NULL);
