@@ -195,6 +195,8 @@ static void exec_htmlview_menu_cb(void)
   GtkWidget *dialog;
   gint response;
   
+  SYLPF_START_FUNC;
+
   dialog = create_preference_dialog(&SYLPF_OPTION);
   
   gtk_widget_show_all(dialog);
@@ -213,6 +215,8 @@ static void exec_htmlview_menu_cb(void)
   }
 
   gtk_widget_destroy(dialog);
+  
+  SYLPF_END_FUNC;
 }
 
 static GtkWidget *create_preference_dialog(HtmlViewOption *option)
@@ -226,6 +230,8 @@ static GtkWidget *create_preference_dialog(HtmlViewOption *option)
   gpointer mainwin;
   GtkWidget *window;
   
+  SYLPF_START_FUNC;
+
   mainwin = syl_plugin_main_window_get();
   window = ((MainWindow*)mainwin)->window;
   
@@ -264,6 +270,7 @@ static GtkWidget *create_preference_dialog(HtmlViewOption *option)
 
   gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), SYLPF_BOX_SPACE);
 
+  SYLPF_END_FUNC;
   return dialog;
 }
 
@@ -275,8 +282,11 @@ static GtkWidget *create_htmlview(GtkNotebook *notebook)
 #elif defined(USE_GTKHTML)
   GtkWidget *html_widget = gtk_html_new();
 #endif
+  GtkWidget *scrolled;
 
-  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+  SYLPF_START_FUNC;
+
+  scrolled = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled),
                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_container_add(GTK_CONTAINER(scrolled), GTK_WIDGET(html_widget));
@@ -286,6 +296,9 @@ static GtkWidget *create_htmlview(GtkNotebook *notebook)
                     GTK_WIDGET(scrolled));
   gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(notebook),
                                   GTK_WIDGET(scrolled), _("HTML"));
+
+  SYLPF_END_FUNC;
+
   return GTK_WIDGET(html_widget);
 }
 
@@ -301,6 +314,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 #elif defined(USE_GTKHTML)
 #error "Not Implemented"
 #endif
+
+  SYLPF_START_FUNC;
 
   g_return_if_fail(msgview != NULL);
 
@@ -362,8 +377,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     free(html_buf);
   } else {
     gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
-    return;
   }
+  SYLPF_END_FUNC;
 }
 
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
@@ -371,7 +386,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *vbox;
   GtkWidget *private, *image, *scripts, *switch_tab;
   
-  debug_print("create_config_main_page\n");
+  SYLPF_START_FUNC;
+
   if (notebook == NULL){
     return NULL;
   }
@@ -418,13 +434,16 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
   gtk_widget_show_all(notebook);
 
+  SYLPF_END_FUNC;
+
   return vbox;
 }
 
 /* about, copyright tab */
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {
-  debug_print("create_config_about_page\n");
+  SYLPF_START_FUNC;
+
   if (notebook == NULL){
     return NULL;
   }
@@ -452,5 +471,6 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *general_lbl = gtk_label_new(_("About"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, general_lbl);
   gtk_widget_show_all(notebook);
-  return NULL;
+
+  SYLPF_RETURN_VALUE(NULL);
 }
