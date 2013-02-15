@@ -24,7 +24,7 @@
 #include "messageview.h"
 #include "procheader.h"
 #include "htmlview.h"
-#include "sylpf_utility.h"
+#include "sylplugin_factory.h"
 
 static SylPluginInfo info = {
   N_(PLUGIN_NAME),
