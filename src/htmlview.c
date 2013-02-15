@@ -348,12 +348,14 @@ GtkWidget *SYLPF_FUNC(pack_widget_with_aligned_frame)(GtkWidget *widget,
 {
   GtkWidget *align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(align),
-                            ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
+                            SYLPF_ALIGN_TOP, SYLPF_ALIGN_BOTTOM,
+                            SYLPF_ALIGN_LEFT, SYLPF_ALIGN_RIGHT);
 
   GtkWidget *frame = gtk_frame_new(frame_title);
   GtkWidget *frame_align = gtk_alignment_new(0, 0, 1, 1);
   gtk_alignment_set_padding(GTK_ALIGNMENT(frame_align),
-                            ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT);
+                            SYLPF_ALIGN_TOP, SYLPF_ALIGN_BOTTOM,
+                            SYLPF_ALIGN_LEFT, SYLPF_ALIGN_RIGHT);
 
   gtk_container_add(GTK_CONTAINER(frame_align), widget);
   gtk_container_add(GTK_CONTAINER(frame), frame_align);
