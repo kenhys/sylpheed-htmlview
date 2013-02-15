@@ -6,6 +6,7 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <libintl.h>
 #if defined(USE_WEBKITGTK)
 #include <webkit/webkit.h>
 #include <webkit/webkitwebview.h>
