@@ -378,7 +378,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   scripts = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.scripts, _("Scripting"));
 
   SYLPF_OPTION.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
-  switch_tab = pack_widget_with_aligned_frame(SYLPF_OPTION.switch_tab, _("HTML Tab"));
+  switch_tab = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.switch_tab, _("HTML Tab"));
 
   gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
