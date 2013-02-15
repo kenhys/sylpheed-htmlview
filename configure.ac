@@ -39,9 +39,14 @@ AC_MSG_RESULT($enable_webkitgtk)
 AC_ARG_ENABLE([gtkhtml],
 	      [AS_HELP_STRING([--enable-gtkhtml],
                               [use GtkHTML as HTML rendering engine. [default=no]])],
-              [],
+              [enable_gtkhtml="$enableval"],
               [enable_gtkhtml=no]
 )
+AC_MSG_CHECKING([whether enable GtkHTML])
+if test "x$enable_gtkhtml" != "xyes"; then
+  enable_gtkhtml="no"
+fi
+AC_MSG_RESULT($enable_gtkhtml)
 
 AS_IF([test "x$enable_webkitgtk" != xno && test "x$enable_gtkhtml" != xno],
       [AC_DEFINE([USE_GTKHTML], [1], [GtkHTML support])],
