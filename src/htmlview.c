@@ -349,7 +349,7 @@ static gchar* g_copyright = N_("HtmlView is distributed under 2-Clause BSD licen
 "Copyright (C) 2012 HAYASHI Kentaro <kenhys@gmail.com>"
 			       "\n");
 
-GtkWidget *SYLPF_FUNC(pack_widget_with_aligned_frame)(GtkWidget *widget,
+static GtkWidget *pack_widget_with_aligned_frame(GtkWidget *widget,
                                           const gchar *frame_title)
 {
   GtkWidget *align = gtk_alignment_new(0, 0, 1, 1);
@@ -372,7 +372,7 @@ GtkWidget *SYLPF_FUNC(pack_widget_with_aligned_frame)(GtkWidget *widget,
   return align;
 }
 
-GtkWidget *SYLPF_FUNC(create_config_main_page)(GtkWidget *notebook, GKeyFile *pkey)
+static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
   GtkWidget *private, *image, *scripts, *switch_tab;
@@ -428,7 +428,7 @@ GtkWidget *SYLPF_FUNC(create_config_main_page)(GtkWidget *notebook, GKeyFile *pk
 }
 
 /* about, copyright tab */
-GtkWidget *SYLPF_FUNC(create_config_about_page)(GtkWidget *notebook, GKeyFile *pkey)
+static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   debug_print("create_config_about_page\n");
   if (notebook == NULL){
