@@ -45,6 +45,7 @@ static void load_option_from_rcfile(void);
 
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_preference_dialog(HtmlViewOption *option);
 
 gulong app_exit_handler_id = 0;
 
@@ -190,65 +191,79 @@ static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
 
 static void exec_htmlview_menu_cb(void)
 {
-  /* show modal dialog */
-  GtkWidget *window;
-  GtkWidget *vbox;
+  GtkWidget *dialog;
+  gint response;
+  
+  dialog = create_preference_dialog(&SYLPF_OPTION);
+  
+  gtk_widget_show_all(dialog);
+  response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+  switch (response) {
+  case GTK_RESPONSE_APPLY:
+    apply_htmlview_preference(&SYLPF_OPTION);
+    break;
+  case GTK_RESPONSE_OK:
+    save_htmlview_preference(&SYLPF_OPTION);
+    break;
+  case GTK_RESPONSE_CANCEL:
+  default:
+    break;
+  }
+
+  gtk_widget_destroy(dialog);
+}
+
+static GtkWidget *create_preference_dialog(HtmlViewOption *option)
+{
+  GtkWidget *vbox, *hbox;
   GtkWidget *confirm_area;
   GtkWidget *ok_btn;
   GtkWidget *cancel_btn;
+  GtkWidget *dialog;
+  gint width, height;
+  gpointer mainwin;
+  GtkWidget *window;
+  
+  mainwin = syl_plugin_main_window_get();
+  window = ((MainWindow*)mainwin)->window;
+  
+  gtk_window_get_size(GTK_WINDOW(window),
+                      &width,
+                      &height);
 
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_container_set_border_width(GTK_CONTAINER(window), 8);
-  gtk_window_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-  gtk_window_set_modal(GTK_WINDOW(window), TRUE);
-  gtk_window_set_policy(GTK_WINDOW(window), FALSE, TRUE, FALSE);
-  gtk_window_set_default_size(GTK_WINDOW(window), 300, 300);
-  gtk_widget_realize(window);
+  dialog = gtk_dialog_new_with_buttons(_("HtmlView"),
+                                       GTK_WINDOW(window),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                       NULL);
 
-  vbox = gtk_vbox_new(FALSE, 6);
-  gtk_widget_show(vbox);
-  gtk_container_add(GTK_CONTAINER(window), vbox);
+  height *= 0.8;
+  if (width * 0.8 > 400) {
+    width = 400;
+  }
 
+  gtk_widget_set_size_request(dialog,
+                              width, height * 0.8);
 
-  /* notebook */ 
+  vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
+  hbox = gtk_hbox_new(TRUE, SYLPF_BOX_SPACE);
+
+  gtk_container_add(GTK_CONTAINER(hbox), vbox);
+  gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
+
   GtkWidget *notebook = gtk_notebook_new();
-  /* main tab */
   create_config_main_page(notebook, SYLPF_OPTION.rcfile);
-  /* about, copyright tab */
   create_config_about_page(notebook, SYLPF_OPTION.rcfile);
 
   gtk_widget_show(notebook);
   gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
 
-  confirm_area = gtk_hbutton_box_new();
-  gtk_button_box_set_layout(GTK_BUTTON_BOX(confirm_area), GTK_BUTTONBOX_END);
-  gtk_box_set_spacing(GTK_BOX(confirm_area), 6);
+  gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), SYLPF_BOX_SPACE);
 
-
-  ok_btn = gtk_button_new_from_stock(GTK_STOCK_OK);
-  GTK_WIDGET_SET_FLAGS(ok_btn, GTK_CAN_DEFAULT);
-  gtk_box_pack_start(GTK_BOX(confirm_area), ok_btn, FALSE, FALSE, 0);
-  gtk_widget_show(ok_btn);
-
-  cancel_btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-  GTK_WIDGET_SET_FLAGS(cancel_btn, GTK_CAN_DEFAULT);
-  gtk_box_pack_start(GTK_BOX(confirm_area), cancel_btn, FALSE, FALSE, 0);
-  gtk_widget_show(cancel_btn);
-
-  gtk_widget_show(confirm_area);
-
-  gtk_box_pack_end(GTK_BOX(vbox), confirm_area, FALSE, FALSE, 0);
-  gtk_widget_grab_default(ok_btn);
-  gtk_widget_show(vbox);
-
-  gtk_window_set_title(GTK_WINDOW(window), _("HtmlView"));
-
-  g_signal_connect(G_OBJECT(ok_btn), "clicked",
-                   G_CALLBACK(prefs_ok_cb), window);
-  g_signal_connect(G_OBJECT(cancel_btn), "clicked",
-                   G_CALLBACK(prefs_cancel_cb), window);
-  gtk_widget_show_all(window);
-
+  return dialog;
 }
 
 static GtkWidget *create_htmlview(GtkNotebook *notebook)
