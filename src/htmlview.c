@@ -13,6 +13,8 @@
 #include <webkit/webkitwebview.h>
 #elif defined(USE_GTKHTML)
 #include <gtkhtml.h>
+#else
+#error "Not Implemented any HTML features"
 #endif
 
 #include "sylmain.h"
