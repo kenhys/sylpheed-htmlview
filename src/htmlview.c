@@ -13,7 +13,7 @@
 #include <webkit/webkit.h>
 #include <webkit/webkitwebview.h>
 #elif defined(USE_GTKHTML)
-#include <gtkhtml.h>
+#include <gtkhtml/gtkhtml.h>
 #else
 #error "Not Implemented any HTML features"
 #endif
