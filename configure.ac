@@ -63,6 +63,10 @@ AS_IF([test "x$enable_webkitgtk" != xno && test "x$enable_gtkhtml" != xno],
       [AC_MSG_ERROR(use WebKitGTK or GtkHTML exclusively.)]
 )
 
+AM_CONDITIONAL([USE_GTKHTML],
+	       [test "${enable_gtkhtml}" = "yes"])
+AM_CONDITIONAL([USE_WEBKITGTK],
+	       [test "${enable_webkitgtk}" = "yes"])
 # For debug
 AC_ARG_ENABLE(debug,
 	      [AS_HELP_STRING([--enable-debug],
