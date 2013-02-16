@@ -1,9 +1,10 @@
 News of htmlview
 
-* 0.4.0 (2012-08-XX)
+* 0.4.0 (2013-02-17)
 
   * fix a bug that conflicts other plugin
   * use font size setting from sylpheedrc
+  * support GtkHTML
 
 * 0.3.0 (2012-08-01)
 
