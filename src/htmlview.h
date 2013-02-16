@@ -7,7 +7,11 @@
 #ifndef __HTMLVIEW_H__
 #define __HTMLVIEW_H__
 
+#ifdef USE_WEBKITHTML
 #include <webkit/webkitwebview.h>
+#endif
+#ifdef USE_GTKHTML
+#endif
 
 #define HTMLVIEW "htmlview"
 #define HTMLVIEWRC "htmlviewrc"
@@ -45,7 +49,12 @@ struct _HtmlViewOption {
   /* rcfile */
   GKeyFile *rcfile;
   
+#if USE_WEBKITGTK
   WebKitWebView *html_view;
+#endif
+#if USE_GTKHTML
+  GtkWidget *html_view;
+#endif
 
   GtkWidget *private_browsing;
   gboolean private_flag;
