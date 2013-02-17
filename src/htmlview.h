@@ -56,6 +56,7 @@ struct _HtmlViewOption {
   GtkWidget *html_view;
 #endif
 
+#if USE_WEBKITGTK
   GtkWidget *private_browsing;
   gboolean private_flag;
 
@@ -65,11 +66,12 @@ struct _HtmlViewOption {
   GtkWidget *scripts;
   gboolean script_flag;
 
+#endif
+
   GtkWidget *switch_tab;
   gboolean switch_tab_flag;
 
   gint is_show_attach_tab;
-
   gint font_size;
 };
     

@@ -142,9 +142,11 @@ static void load_option_from_rcfile(void)
   
   load_option_rcfile(HTMLVIEWRC);
 
+#if USE_WEBKITGTK
   SYLPF_OPTION.private_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
   SYLPF_OPTION.image_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_IMAGES);
   SYLPF_OPTION.script_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SCRIPTS);
+#endif
   SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
   font_name = SYLPF_GET_RC_MESSAGE_FONT_NAME;
@@ -168,23 +170,29 @@ static void save_htmlview_preference(HtmlViewOption *option)
 
 #define TOGGLE_STATE(widget) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))
 
+#if USE_WEBKITGTK
   option->private_flag = TOGGLE_STATE(option->private_browsing);
   option->image_flag = TOGGLE_STATE(option->load_image);
   option->script_flag = TOGGLE_STATE(option->scripts);
+#endif
   option->switch_tab_flag = TOGGLE_STATE(option->switch_tab);
 
+#if USE_WEBKITGTK
   g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(option->private_flag));
   g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(option->image_flag));
   g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(option->script_flag));
+#endif
   g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(option->switch_tab_flag));
 
 #undef TOGGLE_STATE
   
   load_option_rcfile(HTMLVIEWRC);
   
+#if USE_WEBKITGTK
   SYLPF_SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag);
   SYLPF_SET_RC_BOOLEAN(ENABLE_IMAGES, SYLPF_OPTION.image_flag);
   SYLPF_SET_RC_BOOLEAN(ENABLE_SCRIPTS, SYLPF_OPTION.script_flag);
+#endif
   SYLPF_SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, SYLPF_OPTION.switch_tab_flag);
 
   save_option_rcfile();
@@ -391,6 +399,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   }
   vbox = gtk_vbox_new(FALSE, 6);
 
+#if USE_WEBKITGTK
   SYLPF_OPTION.private_browsing = gtk_check_button_new_with_label(_("Enable private browsing."));
   private = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.private_browsing, _("Privacy"));
 
@@ -400,27 +409,37 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   SYLPF_OPTION.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
   scripts = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.scripts, _("Scripting"));
 
+#endif
+
   SYLPF_OPTION.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
   switch_tab = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.switch_tab, _("HTML Tab"));
 
+  gtk_box_pack_start(GTK_BOX(vbox), switch_tab, FALSE, FALSE, 0);
+
+#if USE_WEBKITGTK
   gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), scripts, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), switch_tab, FALSE, FALSE, 0);
+#endif
 
   load_option_rcfile(HTMLVIEWRC);
 
+#if USE_WEBKITGTK
   SYLPF_OPTION.private_flag = SYLPF_GET_RC_BOOLEAN("enable-private-browsing");
   SYLPF_OPTION.image_flag = SYLPF_GET_RC_BOOLEAN("auto-load-images");
   SYLPF_OPTION.script_flag = SYLPF_GET_RC_BOOLEAN("enable-scripts");
+#endif
+
   SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
 #define TOGGLE_STATE(widget, state) \
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.widget), SYLPF_OPTION.state)
 
+#if USE_WEBKITGTK
   TOGGLE_STATE(private_browsing, private_flag);
   TOGGLE_STATE(load_image, image_flag);
   TOGGLE_STATE(scripts, script_flag);
+#endif
   TOGGLE_STATE(switch_tab, switch_tab_flag);
 
   save_option_rcfile();
