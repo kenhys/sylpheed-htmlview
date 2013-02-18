@@ -1,15 +1,15 @@
 
 NAME=htmlview
 TARGET=src/$NAME.dll
-SRC="src/$NAME.c src/ui.c"
-OBJS="src/$NAME.o src/ui.o src/version.o"
+SRC="src/$NAME.c"
+OBJS="src/$NAME.o src/version.o src/sylplugin_factory.o"
 PKG=sylpheed-$NAME
 LIBSYLPH=./lib/libsylph-0-1.a
 LIBSYLPHEED=./lib/libsylpheed-plugin-0-1.a
 LIBSYLFILTER=./lib/libsylfilter.a
 #LIBS=" -lglib-2.0-0  -lintl"
-LIBS=" `pkg-config --libs glib-2.0 gobject-2.0 gtk+-2.0 gthread-2.0`"
-INC=" -I. -I../../ -I../../libsylph -I../../src -I/mingw/local `pkg-config --cflags glib-2.0 cairo gdk-2.0 gtk+-2.0 gthread-2.0`"
+LIBS=" `pkg-config --libs glib-2.0 gobject-2.0 gtk+-2.0 gthread-2.0 libgtkhtml-3.14`"
+INC=" -I. -I../../ -I../../libsylph -I../../src -I../sylplugin_factory/src -I/mingw/local `pkg-config --cflags glib-2.0 cairo gdk-2.0 gtk+-2.0 gthread-2.0 libgtkhtml-3.14`"
 
 DEF=" -DHAVE_CONFIG_H -DUNICODE -D_UNICODE -DRELEASE_3_1"
 DEBUG=0
@@ -50,7 +50,7 @@ function compile ()
 	fi
     done
 
-    com="gcc -shared -o $TARGET $OBJS -L./lib $LIBSYLPH $LIBSYLPHEED $LIBS -lssleay32 -leay32 -lws2_32 -liconv"
+    com="gcc -shared -o $TARGET $OBJS -L./lib $LIBSYLPH $LIBSYLPHEED $LIBS -lws2_32 -liconv"
     echo $com
     eval $com
     if [ $? != 0 ]; then
