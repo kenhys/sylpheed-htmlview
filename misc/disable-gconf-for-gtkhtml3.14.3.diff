@@ -1,0 +1,215 @@
+--- src/gtkhtml.c.orig	2007-05-25 15:43:03 +0900
++++ src/gtkhtml.c	2013-02-17 17:02:24 +0900
+@@ -109,8 +109,10 @@
+ 
+ static GtkLayoutClass *parent_class = NULL;
+ 
++#if 0
+ static GConfClient *gconf_client = NULL;
+ static GError      *gconf_error  = NULL;
++#endif
+ 
+ enum {
+ 	TITLE_CHANGED,
+@@ -740,12 +742,16 @@
+ 		}
+ 
+ 		if (html->priv->notify_spell_id) {
++#if 0
+ 			gconf_client_notify_remove (gconf_client, html->priv->notify_spell_id);
++#endif
+ 			html->priv->notify_spell_id = 0;
+ 		}
+ 
+ 		if (html->priv->notify_monospace_font_id) {
++#if 0
+ 			gconf_client_notify_remove (gconf_client, html->priv->notify_monospace_font_id);
++#endif
+ 			html->priv->notify_monospace_font_id = 0;
+ 		}
+ 
+@@ -781,11 +787,14 @@
+ static cairo_font_options_t *
+ get_font_options (void)
+ {
++#if 0
+ 	char *antialiasing, *hinting, *subpixel_order;
+ 	GConfClient *gconf = gconf_client_get_default ();
++#endif
+ 	cairo_font_options_t *font_options = cairo_font_options_create ();
+ 
+ 	/* Antialiasing */
++#if 0
+ 	antialiasing = gconf_client_get_string (gconf,
+ 			"/desktop/gnome/font_rendering/antialiasing", NULL);
+ 	if (antialiasing == NULL) {
+@@ -836,6 +845,11 @@
+ 	g_free (hinting);
+ 	g_free (subpixel_order);
+ 	g_object_unref (gconf);
++#else
++	cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_DEFAULT);
++	cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_DEFAULT);
++	cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
++#endif
+ 	return font_options;
+ }
+ 
+@@ -870,6 +884,7 @@
+ 		}
+ 	}
+ 		
++#if 0
+ 	if (!fixed_name) {
+ 		GConfClient *gconf;
+ 
+@@ -887,6 +902,7 @@
+ 		}
+ 		g_object_unref (gconf);
+ 	}
++#endif
+ 
+ 	if (!fixed_name) {
+ 		fixed_family = "Monospace";
+@@ -2391,6 +2407,7 @@
+ 	if (!klass->properties) {
+ 		klass->properties = gtk_html_class_properties_new (GTK_WIDGET (html));
+ 		
++#if 0
+ 		if (!gconf_is_initialized ()) {
+ 			char *argv[] = { "gtkhtml", NULL };
+ 			
+@@ -2414,6 +2431,7 @@
+ 
+ 		if (gconf_error)
+ 			g_warning ("gconf error: %s\n", gconf_error->message);
++#endif
+ 	}
+ }
+ 
+@@ -2744,6 +2762,7 @@
+ 
+ /* dnd end */
+ 
++#if 0
+ static void
+ read_key_theme (GtkHTMLClass *html_class)
+ {
+@@ -2770,6 +2789,7 @@
+ 		html_engine_refresh_fonts (e);
+ 	}
+ }
++#endif
+ 
+ static void 
+ gtk_html_direction_changed (GtkWidget *widget, GtkTextDirection previous_dir)
+@@ -3168,9 +3188,11 @@
+ 	gtk_rc_parse (filename);
+ 	g_free (filename);
+ 	html_class->emacs_bindings = gtk_binding_set_find ("gtkhtml-bindings-emacs");
++#if 0
+ 	read_key_theme (html_class);
+ 	gconf_client_notify_add (gconf_client_get_default (), "/desktop/gnome/interface/gtk_key_theme",
+ 				 client_notify_key_theme, html_class, NULL, &gconf_error);
++#endif
+ }
+ 
+ static void
+@@ -3178,6 +3200,7 @@
+ {
+ 	setup_class_properties (html);
+ 
++#if 0
+ 	if (!gconf_client)
+ 		gconf_client = gconf_client_get_default ();
+ 
+@@ -3187,6 +3210,7 @@
+ 		g_warning ("gconf error: %s\n", gconf_error->message);
+ 		html->priv->notify_spell_id = 0;
+ 	}
++#endif
+ }
+ 
+ void
+@@ -3477,10 +3501,11 @@
+ 	g_signal_connect (G_OBJECT (html->priv->im_context), "delete_surrounding",
+ 			  G_CALLBACK (gtk_html_im_delete_surrounding_cb), html);
+ 
++#if 0
+ 	html->priv->notify_monospace_font_id =
+ 		gconf_client_notify_add (gconf_client_get_default (), "/desktop/gnome/interface/monospace_font_name",
+ 					 client_notify_monospace_font, html, NULL, &gconf_error);
+-
++#endif
+ 	gtk_html_construct (html);
+ }
+ 
+@@ -5642,7 +5667,11 @@
+ gboolean
+ gtk_html_build_with_gconf (void)
+ {
++#if 0
+ 	return TRUE;
++#else
++	return FALSE;
++#endif
+ }
+ 
+ static void
+--- src/gtkhtml-properties.h.orig	2007-04-05 18:15:35 +0900
++++ src/gtkhtml-properties.h	2013-02-17 17:12:02 +0900
+@@ -29,7 +29,9 @@
+ #include <glib.h>
+ #include <gdk/gdktypes.h>
+ 
++#if 0
+ #include <gconf/gconf-client.h>
++#endif
+ 
+ #include <gtk/gtkobject.h>
+ #include "gtkhtml-types.h"
+@@ -54,11 +56,13 @@
+ void                     gtk_html_class_properties_destroy   (GtkHTMLClassProperties *p);
+ void                     gtk_html_class_properties_copy      (GtkHTMLClassProperties *p1,
+ 							      GtkHTMLClassProperties *p2);
++#if 0
+ void                     gtk_html_class_properties_load      (GtkHTMLClassProperties *p,
+ 							      GConfClient *client);
+ void                     gtk_html_class_properties_update    (GtkHTMLClassProperties *p,
+ 							      GConfClient *client,
+ 							      GtkHTMLClassProperties *old);
++#endif
+ 
+ /* enum types */
+ 
+--- src/gtkhtml-properties.c.orig	2007-04-05 18:15:35 +0900
++++ src/gtkhtml-properties.c	2013-02-17 17:13:02 +0900
+@@ -110,6 +110,7 @@
+         gconf_value_free (val); } \
+         g_free (key);
+ 
++#if 0
+ void
+ gtk_html_class_properties_load (GtkHTMLClassProperties *p, GConfClient *client)
+ {
+@@ -122,6 +123,7 @@
+ 	       g_free (p->language), g_strdup);
+ 
+ }
++#endif
+ 
+ #define SET(t,x,prop) \
+         { key = g_strconcat (GTK_HTML_GCONF_DIR, x, NULL); \
+@@ -129,10 +131,12 @@
+         g_free (key); }
+ 
+ 
++#if 0
+ void
+ gtk_html_class_properties_update (GtkHTMLClassProperties *p, GConfClient *client, GtkHTMLClassProperties *old)
+ {
+ }
++#endif
+ 
+ /* enums */
+ 
