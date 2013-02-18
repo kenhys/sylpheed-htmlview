@@ -7,7 +7,11 @@
 #ifndef __HTMLVIEW_H__
 #define __HTMLVIEW_H__
 
+#ifdef USE_WEBKITHTML
 #include <webkit/webkitwebview.h>
+#endif
+#ifdef USE_GTKHTML
+#endif
 
 #define HTMLVIEW "htmlview"
 #define HTMLVIEWRC "htmlviewrc"
@@ -38,13 +42,21 @@ typedef struct _HtmlViewOption HtmlViewOption;
 struct _HtmlViewOption {
   /* General section */
 
+  GtkWidget *window;
+
   /* full path to ghostbiffrc*/
   gchar *rcpath;
   /* rcfile */
   GKeyFile *rcfile;
   
+#if USE_WEBKITGTK
   WebKitWebView *html_view;
+#endif
+#if USE_GTKHTML
+  GtkWidget *html_view;
+#endif
 
+#if USE_WEBKITGTK
   GtkWidget *private_browsing;
   gboolean private_flag;
 
@@ -54,11 +66,12 @@ struct _HtmlViewOption {
   GtkWidget *scripts;
   gboolean script_flag;
 
+#endif
+
   GtkWidget *switch_tab;
   gboolean switch_tab_flag;
 
   gint is_show_attach_tab;
-
   gint font_size;
 };
     

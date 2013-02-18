@@ -4,10 +4,19 @@
  *
  */
 
+#include "config.h"
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
+#include <libintl.h>
+#if defined(USE_WEBKITGTK)
 #include <webkit/webkit.h>
 #include <webkit/webkitwebview.h>
+#elif defined(USE_GTKHTML)
+#include <gtkhtml/gtkhtml.h>
+#else
+#error "Not Implemented any HTML features"
+#endif
 
 #include "sylmain.h"
 #include "plugin.h"
@@ -20,11 +29,12 @@
 #include "messageview.h"
 #include "procheader.h"
 #include "htmlview.h"
-#include "sylpf_utility.h"
+#include "sylplugin_factory.h"
+#include "copying.h"
 
 static SylPluginInfo info = {
   N_(PLUGIN_NAME),
-  "0.3.0",
+  "0.4.0",
   "HAYASHI Kentaro",
   N_(PLUGIN_DESC)
 };
@@ -37,7 +47,19 @@ static void app_exit_cb(GObject *obj, gpointer data);
 static void exec_htmlview_menu_cb(void);
 static void load_option_from_rcfile(void);
 
+static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_preference_dialog(HtmlViewOption *option);
+
+static void save_htmlview_preference(HtmlViewOption *option);
+
 gulong app_exit_handler_id = 0;
+
+#if defined(USE_WEBKITGTK)
+#elif defined(USE_GTKHTML)
+#else
+#error "use WebKitGTK or GtkHTML"
+#endif
 
 void plugin_load(void)
 {
@@ -120,9 +142,11 @@ static void load_option_from_rcfile(void)
   
   load_option_rcfile(HTMLVIEWRC);
 
+#if USE_WEBKITGTK
   SYLPF_OPTION.private_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING);
   SYLPF_OPTION.image_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_IMAGES);
   SYLPF_OPTION.script_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SCRIPTS);
+#endif
   SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
 
   font_name = SYLPF_GET_RC_MESSAGE_FONT_NAME;
@@ -140,108 +164,133 @@ static void load_option_from_rcfile(void)
 }
 
 
-static void prefs_ok_cb(GtkWidget *widget, gpointer data)
+static void save_htmlview_preference(HtmlViewOption *option)
 {
+  SYLPF_START_FUNC;
 
 #define TOGGLE_STATE(widget) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))
 
-  SYLPF_OPTION.private_flag = TOGGLE_STATE(SYLPF_OPTION.private_browsing);
-  SYLPF_OPTION.image_flag = TOGGLE_STATE(SYLPF_OPTION.load_image);
-  SYLPF_OPTION.script_flag = TOGGLE_STATE(SYLPF_OPTION.scripts);
-  SYLPF_OPTION.switch_tab_flag = TOGGLE_STATE(SYLPF_OPTION.switch_tab);
+#if USE_WEBKITGTK
+  option->private_flag = TOGGLE_STATE(option->private_browsing);
+  option->image_flag = TOGGLE_STATE(option->load_image);
+  option->script_flag = TOGGLE_STATE(option->scripts);
+#endif
+  option->switch_tab_flag = TOGGLE_STATE(option->switch_tab);
 
-  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(SYLPF_OPTION.private_flag));
-  g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(SYLPF_OPTION.image_flag));
-  g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(SYLPF_OPTION.script_flag));
-  g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(SYLPF_OPTION.switch_tab_flag));
+#if USE_WEBKITGTK
+  g_print("%s:%s\n", ENABLE_PRIVATE_BROWSING, BOOL_TOSTRING(option->private_flag));
+  g_print("%s:%s\n", ENABLE_IMAGES, BOOL_TOSTRING(option->image_flag));
+  g_print("%s:%s\n", ENABLE_SCRIPTS, BOOL_TOSTRING(option->script_flag));
+#endif
+  g_print("%s:%s\n", ENABLE_SWITCH_TAB, BOOL_TOSTRING(option->switch_tab_flag));
 
+#undef TOGGLE_STATE
+  
   load_option_rcfile(HTMLVIEWRC);
   
+#if USE_WEBKITGTK
   SYLPF_SET_RC_BOOLEAN(ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag);
   SYLPF_SET_RC_BOOLEAN(ENABLE_IMAGES, SYLPF_OPTION.image_flag);
   SYLPF_SET_RC_BOOLEAN(ENABLE_SCRIPTS, SYLPF_OPTION.script_flag);
+#endif
   SYLPF_SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, SYLPF_OPTION.switch_tab_flag);
 
   save_option_rcfile();
 
-  gtk_widget_destroy(GTK_WIDGET(data));
-#undef TOGGLE_STATE
-}
-
-static void prefs_cancel_cb(GtkWidget *widget, gpointer data)
-{
-  gtk_widget_destroy(GTK_WIDGET(data));
 }
 
 static void exec_htmlview_menu_cb(void)
 {
-  /* show modal dialog */
-  GtkWidget *window;
-  GtkWidget *vbox;
+  GtkWidget *dialog;
+  gint response;
+  
+  SYLPF_START_FUNC;
+
+  dialog = create_preference_dialog(&SYLPF_OPTION);
+  
+  gtk_widget_show_all(dialog);
+  response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+  switch (response) {
+  case GTK_RESPONSE_OK:
+    save_htmlview_preference(&SYLPF_OPTION);
+    break;
+  case GTK_RESPONSE_CANCEL:
+  default:
+    break;
+  }
+
+  gtk_widget_destroy(dialog);
+  
+  SYLPF_END_FUNC;
+}
+
+static GtkWidget *create_preference_dialog(HtmlViewOption *option)
+{
+  GtkWidget *vbox, *hbox;
   GtkWidget *confirm_area;
   GtkWidget *ok_btn;
   GtkWidget *cancel_btn;
+  GtkWidget *dialog;
+  gint width, height;
+  gpointer mainwin;
+  GtkWidget *window;
+  
+  SYLPF_START_FUNC;
 
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_container_set_border_width(GTK_CONTAINER(window), 8);
-  gtk_window_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-  gtk_window_set_modal(GTK_WINDOW(window), TRUE);
-  gtk_window_set_policy(GTK_WINDOW(window), FALSE, TRUE, FALSE);
-  gtk_window_set_default_size(GTK_WINDOW(window), 300, 300);
-  gtk_widget_realize(window);
+  mainwin = syl_plugin_main_window_get();
+  window = ((MainWindow*)mainwin)->window;
+  
+  gtk_window_get_size(GTK_WINDOW(window),
+                      &width,
+                      &height);
 
-  vbox = gtk_vbox_new(FALSE, 6);
-  gtk_widget_show(vbox);
-  gtk_container_add(GTK_CONTAINER(window), vbox);
+  dialog = gtk_dialog_new_with_buttons(_("HtmlView"),
+                                       GTK_WINDOW(window),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                       NULL);
 
+  height *= 0.8;
+  if (width * 0.8 > 400) {
+    width = 400;
+  }
 
-  /* notebook */ 
+  gtk_widget_set_size_request(dialog,
+                              width, height * 0.8);
+
+  vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
+  hbox = gtk_hbox_new(TRUE, SYLPF_BOX_SPACE);
+
+  gtk_container_add(GTK_CONTAINER(hbox), vbox);
+  gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
+
   GtkWidget *notebook = gtk_notebook_new();
-  /* main tab */
-  SYLPF_FUNC(create_config_main_page)(notebook, SYLPF_OPTION.rcfile);
-  /* about, copyright tab */
-  SYLPF_FUNC(create_config_about_page)(notebook, SYLPF_OPTION.rcfile);
+  create_config_main_page(notebook, SYLPF_OPTION.rcfile);
+  create_config_about_page(notebook, SYLPF_OPTION.rcfile);
 
   gtk_widget_show(notebook);
   gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
 
-  confirm_area = gtk_hbutton_box_new();
-  gtk_button_box_set_layout(GTK_BUTTON_BOX(confirm_area), GTK_BUTTONBOX_END);
-  gtk_box_set_spacing(GTK_BOX(confirm_area), 6);
+  gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), SYLPF_BOX_SPACE);
 
-
-  ok_btn = gtk_button_new_from_stock(GTK_STOCK_OK);
-  GTK_WIDGET_SET_FLAGS(ok_btn, GTK_CAN_DEFAULT);
-  gtk_box_pack_start(GTK_BOX(confirm_area), ok_btn, FALSE, FALSE, 0);
-  gtk_widget_show(ok_btn);
-
-  cancel_btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-  GTK_WIDGET_SET_FLAGS(cancel_btn, GTK_CAN_DEFAULT);
-  gtk_box_pack_start(GTK_BOX(confirm_area), cancel_btn, FALSE, FALSE, 0);
-  gtk_widget_show(cancel_btn);
-
-  gtk_widget_show(confirm_area);
-
-  gtk_box_pack_end(GTK_BOX(vbox), confirm_area, FALSE, FALSE, 0);
-  gtk_widget_grab_default(ok_btn);
-  gtk_widget_show(vbox);
-
-  gtk_window_set_title(GTK_WINDOW(window), _("HtmlView"));
-
-  g_signal_connect(G_OBJECT(ok_btn), "clicked",
-                   G_CALLBACK(prefs_ok_cb), window);
-  g_signal_connect(G_OBJECT(cancel_btn), "clicked",
-                   G_CALLBACK(prefs_cancel_cb), window);
-  gtk_widget_show_all(window);
-
+  SYLPF_RETURN_VALUE(dialog);
 }
 
-static WebKitWebView *create_htmlview(GtkNotebook *notebook)
+static GtkWidget *create_htmlview(GtkNotebook *notebook)
 {
 
+#if defined(USE_WEBKITGTK)
   WebKitWebView *html_widget = WEBKIT_WEB_VIEW(webkit_web_view_new());
+#elif defined(USE_GTKHTML)
+  GtkWidget *html_widget = gtk_html_new();
+#endif
+  GtkWidget *scrolled;
 
-  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+  SYLPF_START_FUNC;
+
+  scrolled = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled),
                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_container_add(GTK_CONTAINER(scrolled), GTK_WIDGET(html_widget));
@@ -251,7 +300,8 @@ static WebKitWebView *create_htmlview(GtkNotebook *notebook)
                     GTK_WIDGET(scrolled));
   gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(notebook),
                                   GTK_WIDGET(scrolled), _("HTML"));
-  return html_widget;
+
+  SYLPF_RETURN_VALUE(GTK_WIDGET(html_widget));
 }
 
 static void messageview_show_cb(GObject *obj, gpointer msgview,
@@ -261,13 +311,27 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   MimeInfo *mimeinfo, *partial;
   FILE *msg_file, *input = NULL;
   gchar *html_buf = NULL;
+#if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
+#elif defined(USE_GTKHTML)
+#else
+#error "Not Implemented"
+#endif
+
+  SYLPF_START_FUNC;
 
   g_return_if_fail(msgview != NULL);
 
   messageview = (MessageView*)msgview;
 
   g_return_if_fail(messageview != NULL);
+
+  SYLPF_OPTION.is_show_attach_tab = SYLPF_GET_RC_SHOW_ATTACH_TAB;
+
+  if (SYLPF_OPTION.is_show_attach_tab == 0) {
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
+    SYLPF_RETURN;
+  }
 
   if (SYLPF_OPTION.html_view == NULL) {
     SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
@@ -283,13 +347,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   if (partial && partial->mime_type == MIME_TEXT_HTML) {
     
-    SYLPF_OPTION.is_show_attach_tab = SYLPF_GET_RC_SHOW_ATTACH_TAB;
-
-    if (SYLPF_OPTION.is_show_attach_tab == 0) {
-      gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
-      return;
-    }
-
     partial->mime_type = MIME_TEXT;
 
     input = procmime_get_text_content(partial, msg_file, NULL);
@@ -298,6 +355,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     fread(html_buf, partial->size, 1, input);
 
+#if defined(USE_WEBKITGTK)
     settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
 
     g_object_set(G_OBJECT(settings), ENABLE_IMAGES, SYLPF_OPTION.image_flag, NULL);
@@ -310,6 +368,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     webkit_web_view_load_string(SYLPF_OPTION.html_view, html_buf, NULL, NULL, "");
 
+#elif defined(USE_GTKHTML)
+    gtk_html_load_from_string(GTK_HTML(SYLPF_OPTION.html_view), html_buf, -1);
+#endif
+
     if (SYLPF_OPTION.switch_tab_flag != FALSE) {
       gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
     }
@@ -318,7 +380,109 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     free(html_buf);
   } else {
     gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 0);
-    return;
   }
+  SYLPF_END_FUNC;
 }
 
+static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
+{
+  GtkWidget *vbox;
+  GtkWidget *private, *image, *scripts, *switch_tab;
+  
+  SYLPF_START_FUNC;
+
+  if (notebook == NULL){
+    return NULL;
+  }
+  /* startup */
+  if (pkey!=NULL){
+  }
+  vbox = gtk_vbox_new(FALSE, 6);
+
+#if USE_WEBKITGTK
+  SYLPF_OPTION.private_browsing = gtk_check_button_new_with_label(_("Enable private browsing."));
+  private = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.private_browsing, _("Privacy"));
+
+  SYLPF_OPTION.load_image = gtk_check_button_new_with_label(_("Enable auto load image."));
+  image = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.load_image, _("Image"));
+
+  SYLPF_OPTION.scripts = gtk_check_button_new_with_label(_("Enable scripts."));
+  scripts = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.scripts, _("Scripting"));
+
+#endif
+
+  SYLPF_OPTION.switch_tab = gtk_check_button_new_with_label(_("Show HTML tab as default."));
+  switch_tab = sylpf_pack_widget_with_aligned_frame(SYLPF_OPTION.switch_tab, _("HTML Tab"));
+
+  gtk_box_pack_start(GTK_BOX(vbox), switch_tab, FALSE, FALSE, 0);
+
+#if USE_WEBKITGTK
+  gtk_box_pack_start(GTK_BOX(vbox), private, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), image, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), scripts, FALSE, FALSE, 0);
+#endif
+
+  load_option_rcfile(HTMLVIEWRC);
+
+#if USE_WEBKITGTK
+  SYLPF_OPTION.private_flag = SYLPF_GET_RC_BOOLEAN("enable-private-browsing");
+  SYLPF_OPTION.image_flag = SYLPF_GET_RC_BOOLEAN("auto-load-images");
+  SYLPF_OPTION.script_flag = SYLPF_GET_RC_BOOLEAN("enable-scripts");
+#endif
+
+  SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
+
+#define TOGGLE_STATE(widget, state) \
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(SYLPF_OPTION.widget), SYLPF_OPTION.state)
+
+#if USE_WEBKITGTK
+  TOGGLE_STATE(private_browsing, private_flag);
+  TOGGLE_STATE(load_image, image_flag);
+  TOGGLE_STATE(scripts, script_flag);
+#endif
+  TOGGLE_STATE(switch_tab, switch_tab_flag);
+
+  save_option_rcfile();
+
+  GtkWidget *general_lbl = gtk_label_new(_("General"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
+  gtk_widget_show_all(notebook);
+
+  SYLPF_RETURN_VALUE(vbox);
+}
+
+/* about, copyright tab */
+static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
+{
+  SYLPF_START_FUNC;
+
+  if (notebook == NULL){
+    return NULL;
+  }
+  GtkWidget *hbox = gtk_hbox_new(TRUE, 6);
+  GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+  gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 6);
+
+  GtkWidget *misc = gtk_label_new(HTMLVIEW);
+  gtk_box_pack_start(GTK_BOX(vbox), misc, FALSE, TRUE, 6);
+
+  misc = gtk_label_new(PLUGIN_DESC);
+  gtk_box_pack_start(GTK_BOX(vbox), misc, FALSE, TRUE, 6);
+
+  /* copyright */
+  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+
+  GtkTextBuffer *tbuffer = gtk_text_buffer_new(NULL);
+  gtk_text_buffer_set_text(tbuffer, _(copyright), strlen(copyright));
+  GtkWidget *tview = gtk_text_view_new_with_buffer(tbuffer);
+  gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), FALSE);
+  gtk_container_add(GTK_CONTAINER(scrolled), tview);
+
+  gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, 6);
+
+  GtkWidget *general_lbl = gtk_label_new(_("About"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, general_lbl);
+  gtk_widget_show_all(notebook);
+
+  SYLPF_RETURN_VALUE(NULL);
+}
