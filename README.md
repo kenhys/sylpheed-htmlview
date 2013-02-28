@@ -28,6 +28,17 @@ Install
 Usage
 -----
 
+Click [Tools]-[HtmlView [htmlview]]] menu, then customize preference settings about htmlview plugin.
+
+Note that this plugin requires [Toggle attachment list view with tab] option is enabled.
+
+Check required option by follows:
+
+1. Click [Configuration]-[Common preferences]
+2. Select [Display] tab
+3. Select [Attachment] tab inside [Display] tab
+4. Confirm [Toggle attachment list view with tab] is enabled
+
 Browse html mail.
 htmlview plugin automatically renders HTML mail in messageview.
 
