@@ -1,0 +1,313 @@
+--- gtkhtml-3.32.2/a11y/object.h.orig	2010-09-13 21:16:10 +0900
++++ gtkhtml-3.32.2/a11y/object.h	2013-02-24 01:52:14 +0900
+@@ -54,4 +54,7 @@
+ 
+ AtkObject* gtk_html_a11y_new (GtkWidget *widget);
+ 
++#define gtk_widget_get_sensitive(widget) GTK_WIDGET_SENSITIVE((widget))
++#define gtk_widget_get_visible(widget) GTK_WIDGET_VISIBLE((widget))
++
+ #endif
+--- gtkhtml-3.32.2/gtkhtml/dllmain.c.orig	2010-09-13 21:16:10 +0900
++++ gtkhtml-3.32.2/gtkhtml/dllmain.c	2013-02-24 04:58:39 +0900
+@@ -52,6 +52,9 @@
+                 return g_strdup (configure_time_path);
+ }
+ 
++gchar *
++g_win32_get_package_installation_directory_of_module (gpointer hmodule);
++
+ static void
+ setup (void)
+ {
+@@ -83,6 +86,43 @@
+  */
+ #undef DATADIR
+ #include <windows.h>
++#include <shlwapi.h>
++
++#ifdef G_OS_WIN32
++gchar *
++g_win32_get_package_installation_directory_of_module (gpointer hmodule)
++{
++  gchar *retval;
++  gchar *p;
++  wchar_t wc_fn[MAX_PATH];
++
++  if (!GetModuleFileNameW (hmodule, wc_fn, MAX_PATH))
++    return NULL;
++
++  retval = g_utf16_to_utf8 (wc_fn, -1, NULL, NULL, NULL);
++
++  if ((p = strrchr (retval, G_DIR_SEPARATOR)) != NULL)
++    *p = '\0';
++
++  p = strrchr (retval, G_DIR_SEPARATOR);
++  if (p && (g_ascii_strcasecmp (p + 1, "bin") == 0 ||
++	    g_ascii_strcasecmp (p + 1, "lib") == 0))
++    *p = '\0';
++
++#ifdef G_WITH_CYGWIN
++  /* In Cygwin we need to have POSIX paths */
++  {
++    gchar tmp[MAX_PATH];
++
++    cygwin_conv_to_posix_path(fn, tmp);
++    g_free(fn);
++    fn = g_strdup(tmp);
++  }
++#endif
++
++  return retval;
++}
++#endif
+ 
+ /* Silence gcc with a prototype */
+ BOOL WINAPI DllMain (HINSTANCE hinstDLL,
+--- gtkhtml-3.32.2/gtkhtml/gtkhtml-properties.h.orig	2010-09-13 21:16:10 +0900
++++ gtkhtml-3.32.2/gtkhtml/gtkhtml-properties.h	2013-02-24 02:06:54 +0900
+@@ -27,7 +27,9 @@
+ #define GTK_HTML_GNOME_CONFIG_PREFIX "/gtkhtml/Settings/"
+ 
+ #include <gtk/gtk.h>
++#if 0
+ #include <gconf/gconf-client.h>
++#endif
+ 
+ #include "gtkhtml-types.h"
+ #include "gtkhtml.h"
+@@ -51,12 +53,13 @@
+ void                     gtk_html_class_properties_destroy   (GtkHTMLClassProperties *p);
+ void                     gtk_html_class_properties_copy      (GtkHTMLClassProperties *p1,
+ 							      GtkHTMLClassProperties *p2);
++#if 0
+ void                     gtk_html_class_properties_load      (GtkHTMLClassProperties *p,
+ 							      GConfClient *client);
+ void                     gtk_html_class_properties_update    (GtkHTMLClassProperties *p,
+ 							      GConfClient *client,
+ 							      GtkHTMLClassProperties *old);
+-
++#endif
+ /* enum types */
+ 
+ #define GTK_TYPE_HTML_CURSOR_SKIP     (gtk_html_cursor_skip_get_type ())
+--- gtkhtml-3.32.2/gtkhtml/gtkhtml-types.h.orig	2010-09-13 21:16:11 +0900
++++ gtkhtml-3.32.2/gtkhtml/gtkhtml-types.h	2013-02-27 22:32:40 +0900
+@@ -66,4 +66,35 @@
+ typedef void (*GtkHTMLPrintCallback) (GtkHTML *html, GtkPrintContext *print_context,
+ 				      gdouble x, gdouble y, gdouble width, gdouble height, gpointer user_data);
+ 
++#define gtk_widget_get_visible(widget) GTK_WIDGET_VISIBLE((widget))
++#define gtk_widget_get_requisition(widget, requisition) gtk_widget_size_request((widget), (requisition))
++#define gtk_widget_set_allocation(widget, allocation) \
++	if (allocation) { \
++	(widget)->allocation.width = allocation->width;		\
++	(widget)->allocation.height = allocation->height; \
++	}	
++#define gtk_selection_data_get_data_type(selection) (selection->type)
++#define gtk_selection_data_get_data_length(selection) (selection->length)
++#define gtk_selection_data_get_data(selection) (selection->data)
++#define gtk_selection_data_get_target(selection) (selection->target)
++#define gtk_selection_data_get_length(selection) (selection->length)
++#define gtk_widget_has_focus(widget) GTK_WIDGET_HAS_FOCUS(widget)
++#define gtk_adjustment_get_lower(widget) (widget->lower)
++#define gtk_adjustment_get_upper(widget) (widget->upper)
++#define gtk_adjustment_get_step_increment(widget) (widget->step_increment)
++#define gtk_adjustment_get_page_increment(widget) (widget->page_increment)
++#define gtk_adjustment_get_page_size(widget) (widget->page_size)
++#define gtk_adjustment_set_lower(widget, val) (widget->lower = (val))
++#define gtk_adjustment_set_upper(widget, val) (widget->upper = (val))
++#define gtk_adjustment_set_page_increment(widget, val) (widget->page_increment = (val))
++#define gtk_adjustment_set_page_size(widget, val) (widget->page_size = (val))
++#define gtk_widget_is_toplevel(widget) GTK_WIDGET_TOPLEVEL(widget)
++#define gtk_widget_get_allocation(widget, obj) \
++(obj)->width = (widget)->allocation.width; \
++(obj)->height = (widget)->allocation.height
++#define gtk_widget_get_realized(widget) GTK_WIDGET_REALIZED(widget)
++#define gtk_widget_get_window(widget) (widget->window)
++#define gtk_layout_get_bin_window(widget) ((widget)->bin_window)
++#define gtk_widget_is_drawable(widget) GTK_WIDGET_DRAWABLE(widget)
++#define pango_units_to_double(val) (val / PANGO_SCALE)
+ #endif
+--- gtkhtml-3.32.2/gtkhtml/gtkhtml.c.orig	2010-09-13 21:16:11 +0900
++++ gtkhtml-3.32.2/gtkhtml/gtkhtml.c	2013-02-24 06:25:55 +0900
+@@ -128,7 +128,9 @@
+ 
+ static GtkLayoutClass *parent_class = NULL;
+ 
++#if 0
+ static GError      *gconf_error  = NULL;
++#endif
+ 
+ enum {
+ 	TITLE_CHANGED,
+@@ -792,9 +794,11 @@
+ 		}
+ 
+ 		if (html->priv->notify_monospace_font_id) {
++#if 0
+ 			gconf_client_notify_remove (
+ 				gconf_client_get_default (),
+ 				html->priv->notify_monospace_font_id);
++#endif
+ 			html->priv->notify_monospace_font_id = 0;
+ 		}
+ 
+@@ -836,9 +840,12 @@
+ get_font_options (void)
+ {
+ 	gchar *antialiasing, *hinting, *subpixel_order;
++#if 0
+ 	GConfClient *gconf = gconf_client_get_default ();
++#endif
+ 	cairo_font_options_t *font_options = cairo_font_options_create ();
+ 
++#if 0
+ 	/* Antialiasing */
+ 	antialiasing = gconf_client_get_string (gconf,
+ 			"/desktop/gnome/font_rendering/antialiasing", NULL);
+@@ -890,6 +897,11 @@
+ 	g_free (hinting);
+ 	g_free (subpixel_order);
+ 	g_object_unref (gconf);
++#else
++	cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_DEFAULT);
++	cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_DEFAULT);
++	cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
++#endif
+ 	return font_options;
+ }
+ 
+@@ -928,6 +940,7 @@
+ 		}
+ 	}
+ 
++#if 0
+ 	if (!fixed_name) {
+ 		GConfClient *gconf;
+ 
+@@ -946,7 +959,7 @@
+ 		}
+ 		g_object_unref (gconf);
+ 	}
+-
++#endif
+ 	if (!fixed_name) {
+ 		fixed_family = "Monospace";
+ 		fixed_size = font_var_size;
+@@ -1170,9 +1183,11 @@
+ 	window = gtk_widget_get_window (widget);
+ 	bin_window = gtk_layout_get_bin_window (&html->layout);
+ 
++#if 0
+ 	style = gtk_widget_get_style (widget);
+ 	style = gtk_style_attach (style, window);
+ 	gtk_widget_set_style (widget, style);
++#endif
+ 
+ 	gdk_window_set_events (bin_window,
+ 			       (gdk_window_get_events (bin_window)
+@@ -1519,7 +1534,6 @@
+ 		gboolean need_scroll;
+ 
+ 		gtk_widget_get_allocation (widget, &allocation);
+-
+ 		if (obj) {
+ 			type = HTML_OBJECT_TYPE (obj);
+ 
+@@ -2809,6 +2823,7 @@
+ 
+ /* dnd end */
+ 
++#if 0
+ static void
+ read_key_theme (GtkHTMLClass *html_class)
+ {
+@@ -2844,6 +2859,7 @@
+ 	else
+ 		html_engine_set_cursor_blink_timeout (0);
+ }
++#endif
+ 
+ static void
+ gtk_html_direction_changed (GtkWidget *widget, GtkTextDirection previous_dir)
+@@ -2884,7 +2900,9 @@
+ 	GtkLayoutClass    *layout_class;
+ 	GtkContainerClass *container_class;
+ 	gchar *filename;
++#if 0
+ 	GConfClient *client;
++#endif
+ 
+ 	html_class = (GtkHTMLClass *) klass;
+ #ifdef USE_PROPS
+@@ -3238,6 +3256,7 @@
+ 	gtk_rc_parse (filename);
+ 	g_free (filename);
+ 	html_class->emacs_bindings = gtk_binding_set_find ("gtkhtml-bindings-emacs");
++#if 0
+ 	read_key_theme (html_class);
+ 
+ 	client = gconf_client_get_default ();
+@@ -3250,6 +3269,7 @@
+ 	client_notify_cursor_blink (client, 0, NULL, NULL);
+ 
+ 	g_object_unref (client);
++#endif
+ }
+ 
+ void
+@@ -3480,7 +3500,11 @@
+ static void
+ gtk_html_init (GtkHTML* html)
+ {
++#if 0
+ 	gtk_widget_set_can_focus (GTK_WIDGET (html), TRUE);
++#else
++	GTK_WIDGET_SET_FLAGS(html, GTK_CAN_DEFAULT);
++#endif
+ 	gtk_widget_set_app_paintable (GTK_WIDGET (html), TRUE);
+ 
+ 	html->editor_api = NULL;
+@@ -3536,10 +3560,11 @@
+ 	g_signal_connect (G_OBJECT (html->priv->im_context), "delete_surrounding",
+ 			  G_CALLBACK (gtk_html_im_delete_surrounding_cb), html);
+ 
++#if 0
+ 	html->priv->notify_monospace_font_id =
+ 		gconf_client_notify_add (gconf_client_get_default (), "/desktop/gnome/interface/monospace_font_name",
+ 					 client_notify_monospace_font, html, NULL, &gconf_error);
+-
++#endif
+ 	gtk_html_construct (html);
+ }
+ 
+@@ -3970,7 +3995,9 @@
+ 	vadj = gtk_layout_get_vadjustment (layout);
+ 
+ 	gtk_adjustment_set_page_size (vadj, html->engine->height);
++#if 0
+ 	gtk_adjustment_set_step_increment (vadj, 14);  /* FIXME */
++#endif
+ 	gtk_adjustment_set_page_increment (vadj, html->engine->height);
+ 
+ 	value = gtk_adjustment_get_value (vadj);
+@@ -3981,7 +4008,9 @@
+ 	}
+ 
+ 	gtk_adjustment_set_page_size (hadj, html->engine->width);
++#if 0
+ 	gtk_adjustment_set_step_increment (hadj, 14);  /* FIXME */
++#endif
+ 	gtk_adjustment_set_page_increment (hadj, html->engine->width);
+ 
+ 	gtk_layout_get_size (layout, &layout_width, &layout_height);
+@@ -6125,7 +6154,7 @@
+ gboolean
+ gtk_html_build_with_gconf (void)
+ {
+-	return TRUE;
++	return FALSE;
+ }
+ 
+ static void
