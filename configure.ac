@@ -22,6 +22,8 @@ else
   CLANG=no
 fi
 
+m4_include(../sylplugin_factory/m4/compiler_flag.m4)
+
 # Checks for libraries.
 AM_PATH_GLIB_2_0(2.8.0,, AC_MSG_ERROR(Test for GLib failed. See the 'INSTALL' for help.))
 AM_PATH_GTK_2_0(2.8.0,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' for help.))
