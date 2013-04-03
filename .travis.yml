@@ -14,6 +14,6 @@ before_script:
   - git submodule update --init --recursive
   - ./autogen.sh
 script:
-  - ./configure
+  - ./configure --enable-webkitgtk
   - make
 
