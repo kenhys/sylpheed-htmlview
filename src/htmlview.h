@@ -20,7 +20,10 @@
 #define N_(String)  gettext_noop(String)
 #define gettext_noop(String) (String)
 
+#undef PLUGIN_NAME
 #define PLUGIN_NAME N_("HtmlView Plug-in")
+
+#undef PLUGIN_DESC
 #define PLUGIN_DESC N_("Show HTML Mail")
 
 #define ENABLE_PRIVATE_BROWSING "enable-private-browsing"
