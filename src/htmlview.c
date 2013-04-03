@@ -329,7 +329,11 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 
   if (SYLPF_OPTION.html_view == NULL) {
+#if defined(USE_WEBKITGTK)
+    SYLPF_OPTION.html_view = (WebKitWebView*)create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#elif defined(USE_GTKHTML)
     SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#endif
   }
 
   mimeinfo = procmime_scan_message(msginfo);
