@@ -26,7 +26,7 @@ INCLUDES = \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
 	-I$(sylpheed_build_dir)/src \
-	-I$(sylpf_srcdir)
+	-I$(sylplugin_factory_source_dir)/src
 
 htmlview_la_LIBADD = \
 	$(GTK_LIBS) \
