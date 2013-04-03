@@ -10,6 +10,7 @@ branches:
     - master
     - develop
 before_script:
+  - sudo apt-get install sylpheed
   - git submodule update --init --recursive
   - ./autogen.sh
 
