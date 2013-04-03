@@ -28,8 +28,8 @@
 #include "headerview.h"
 #include "messageview.h"
 #include "procheader.h"
-#include "htmlview.h"
 #include "sylplugin_factory.h"
+#include "htmlview.h"
 #include "copying.h"
 
 static SylPluginInfo info = {
