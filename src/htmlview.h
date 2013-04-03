@@ -33,9 +33,6 @@
 #define ENABLE_SWITCH_TAB "switch-tab"
 #define DEFAULT_FONT_SIZE "default-font-size"
 
-#define SYLPF_ID HTMLVIEW
-#define SYLPF_OPTION htmlview_option
-
 #define SYLPF_FUNC(arg) htmlview ## _ ## arg
 
 #define BOOL_TOSTRING(value) (value) ? "TRUE" : "FALSE"
