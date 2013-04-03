@@ -228,7 +228,8 @@ static GtkWidget *create_preference_dialog(HtmlViewOption *option)
   gint width, height;
   gpointer mainwin;
   GtkWidget *window;
-  
+  GtkWidget *notebook;
+
   SYLPF_START_FUNC;
 
   mainwin = syl_plugin_main_window_get();
@@ -259,7 +260,7 @@ static GtkWidget *create_preference_dialog(HtmlViewOption *option)
   gtk_container_add(GTK_CONTAINER(hbox), vbox);
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
-  GtkWidget *notebook = gtk_notebook_new();
+  notebook = gtk_notebook_new();
   create_config_main_page(notebook, SYLPF_OPTION.rcfile);
   create_config_about_page(notebook, SYLPF_OPTION.rcfile);
 
@@ -381,7 +382,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
   GtkWidget *private, *image, *scripts, *switch_tab;
-  
+  GtkWidget *label;
+
   SYLPF_START_FUNC;
 
   if (notebook == NULL){
@@ -437,8 +439,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 
   save_option_rcfile();
 
-  GtkWidget *general_lbl = gtk_label_new(_("General"));
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
+  label = gtk_label_new(_("General"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, label);
   gtk_widget_show_all(notebook);
 
   SYLPF_RETURN_VALUE(vbox);
@@ -447,34 +449,41 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 /* about, copyright tab */
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {
+  GtkWidget *hbox, *vbox;
+  GtkWidget *misc;
+  GtkWidget *scrolled;
+  GtkTextBuffer *tbuffer;
+  GtkWidget *tview;
+  GtkWidget *label;
+
   SYLPF_START_FUNC;
 
   if (notebook == NULL){
     return NULL;
   }
-  GtkWidget *hbox = gtk_hbox_new(TRUE, 6);
-  GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+  hbox = gtk_hbox_new(TRUE, 6);
+  vbox = gtk_vbox_new(FALSE, 6);
   gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 6);
 
-  GtkWidget *misc = gtk_label_new(HTMLVIEW);
+  misc = gtk_label_new(HTMLVIEW);
   gtk_box_pack_start(GTK_BOX(vbox), misc, FALSE, TRUE, 6);
 
   misc = gtk_label_new(PLUGIN_DESC);
   gtk_box_pack_start(GTK_BOX(vbox), misc, FALSE, TRUE, 6);
 
   /* copyright */
-  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+  scrolled = gtk_scrolled_window_new(NULL, NULL);
 
-  GtkTextBuffer *tbuffer = gtk_text_buffer_new(NULL);
+  tbuffer = gtk_text_buffer_new(NULL);
   gtk_text_buffer_set_text(tbuffer, _(copyright), strlen(copyright));
-  GtkWidget *tview = gtk_text_view_new_with_buffer(tbuffer);
+  tview = gtk_text_view_new_with_buffer(tbuffer);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), FALSE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
 
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, 6);
 
-  GtkWidget *general_lbl = gtk_label_new(_("About"));
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, general_lbl);
+  label = gtk_label_new(_("About"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, label);
   gtk_widget_show_all(notebook);
 
   SYLPF_RETURN_VALUE(NULL);
