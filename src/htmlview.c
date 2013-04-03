@@ -305,6 +305,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   MimeInfo *mimeinfo, *partial;
   FILE *msg_file, *input = NULL;
   gchar *html_buf = NULL;
+  size_t n_size;
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
@@ -347,7 +348,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     html_buf = calloc(partial->size+1, 1);
 
-    fread(html_buf, partial->size, 1, input);
+    n_size = fread(html_buf, partial->size, 1, input);
 
 #if defined(USE_WEBKITGTK)
     settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
