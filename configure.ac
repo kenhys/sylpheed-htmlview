@@ -22,6 +22,9 @@ else
   CLANG=no
 fi
 
+AC_DEFINE([SYLPF_ID], [PACKAGE_NAME], [""])
+AC_DEFINE([SYLPF_OPTION], [htmlview_option], [""])
+
 m4_include(lib/sylplugin_factory/m4/compiler_flag.m4)
 
 # Checks for libraries.
