@@ -132,12 +132,8 @@ void save_option_rcfile(void)
 
 static void load_option_from_rcfile(void)
 {
-  const gchar *sylrcpath = NULL;
-  GKeyFile *sylrcfile = NULL;
   gchar *font_name = NULL;
   gchar **tokens = NULL;
-  gchar *token = NULL;
-  gint font_size = 0;
   gint index = 0;
   
   load_option_rcfile(HTMLVIEWRC);
@@ -228,9 +224,6 @@ static void exec_htmlview_menu_cb(void)
 static GtkWidget *create_preference_dialog(HtmlViewOption *option)
 {
   GtkWidget *vbox, *hbox;
-  GtkWidget *confirm_area;
-  GtkWidget *ok_btn;
-  GtkWidget *cancel_btn;
   GtkWidget *dialog;
   gint width, height;
   gpointer mainwin;
