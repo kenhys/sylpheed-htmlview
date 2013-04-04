@@ -11,11 +11,9 @@ endif
 
 lib_LTLIBRARIES = htmlview.la
 
-sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
-
 htmlview_la_SOURCES = htmlview.c htmlview.h \
-	$(sylpf_srcdir)/sylplugin_factory.c \
-	$(sylpf_srcdir)/sylplugin_factory.h
+	$(sylplugin_factory_source_dir)/sylplugin_factory.c \
+	$(sylplugin_factory_source_dir)/sylplugin_factory.h
 htmlview_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
 
