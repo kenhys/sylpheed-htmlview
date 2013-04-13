@@ -17,6 +17,6 @@ before_script:
   - git submodule update --init --recursive
   - ./autogen.sh
 script:
-  - ./configure --enable-webkitgtk --with-sylpheed-build-dir=`pwd`/sylpheed
+  - curl https://raw.github.com/kenhys/sylpheed-plugin-factory/master/misc/configure.sh | sh
   - make
 
