@@ -386,7 +386,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
-  GtkWidget *private, *image, *scripts, *switch_tab;
+#if USE_WEBKITGTK
+  GtkWidget *private, *image, *scripts;
+#endif
+  GtkWidget *switch_tab;
   GtkWidget *label;
 
   SYLPF_START_FUNC;
