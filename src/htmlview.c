@@ -28,8 +28,8 @@
 #include "headerview.h"
 #include "messageview.h"
 #include "procheader.h"
-#include "htmlview.h"
 #include "sylplugin_factory.h"
+#include "htmlview.h"
 #include "copying.h"
 
 static SylPluginInfo info = {
@@ -132,12 +132,8 @@ void save_option_rcfile(void)
 
 static void load_option_from_rcfile(void)
 {
-  const gchar *sylrcpath = NULL;
-  GKeyFile *sylrcfile = NULL;
   gchar *font_name = NULL;
   gchar **tokens = NULL;
-  gchar *token = NULL;
-  gint font_size = 0;
   gint index = 0;
   
   load_option_rcfile(HTMLVIEWRC);
@@ -228,14 +224,12 @@ static void exec_htmlview_menu_cb(void)
 static GtkWidget *create_preference_dialog(HtmlViewOption *option)
 {
   GtkWidget *vbox, *hbox;
-  GtkWidget *confirm_area;
-  GtkWidget *ok_btn;
-  GtkWidget *cancel_btn;
   GtkWidget *dialog;
   gint width, height;
   gpointer mainwin;
   GtkWidget *window;
-  
+  GtkWidget *notebook;
+
   SYLPF_START_FUNC;
 
   mainwin = syl_plugin_main_window_get();
@@ -266,7 +260,7 @@ static GtkWidget *create_preference_dialog(HtmlViewOption *option)
   gtk_container_add(GTK_CONTAINER(hbox), vbox);
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
-  GtkWidget *notebook = gtk_notebook_new();
+  notebook = gtk_notebook_new();
   create_config_main_page(notebook, SYLPF_OPTION.rcfile);
   create_config_about_page(notebook, SYLPF_OPTION.rcfile);
 
@@ -311,6 +305,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   MimeInfo *mimeinfo, *partial;
   FILE *msg_file, *input = NULL;
   gchar *html_buf = NULL;
+  size_t n_size;
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
@@ -334,7 +329,11 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 
   if (SYLPF_OPTION.html_view == NULL) {
+#if defined(USE_WEBKITGTK)
+    SYLPF_OPTION.html_view = (WebKitWebView*)create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#elif defined(USE_GTKHTML)
     SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#endif
   }
 
   mimeinfo = procmime_scan_message(msginfo);
@@ -353,7 +352,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     html_buf = calloc(partial->size+1, 1);
 
-    fread(html_buf, partial->size, 1, input);
+    n_size = fread(html_buf, partial->size, 1, input);
 
 #if defined(USE_WEBKITGTK)
     settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
@@ -387,8 +386,12 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
-  GtkWidget *private, *image, *scripts, *switch_tab;
-  
+#if USE_WEBKITGTK
+  GtkWidget *private, *image, *scripts;
+#endif
+  GtkWidget *switch_tab;
+  GtkWidget *label;
+
   SYLPF_START_FUNC;
 
   if (notebook == NULL){
@@ -444,8 +447,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 
   save_option_rcfile();
 
-  GtkWidget *general_lbl = gtk_label_new(_("General"));
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
+  label = gtk_label_new(_("General"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, label);
   gtk_widget_show_all(notebook);
 
   SYLPF_RETURN_VALUE(vbox);
@@ -454,34 +457,41 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 /* about, copyright tab */
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {
+  GtkWidget *hbox, *vbox;
+  GtkWidget *misc;
+  GtkWidget *scrolled;
+  GtkTextBuffer *tbuffer;
+  GtkWidget *tview;
+  GtkWidget *label;
+
   SYLPF_START_FUNC;
 
   if (notebook == NULL){
     return NULL;
   }
-  GtkWidget *hbox = gtk_hbox_new(TRUE, 6);
-  GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+  hbox = gtk_hbox_new(TRUE, 6);
+  vbox = gtk_vbox_new(FALSE, 6);
   gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 6);
 
-  GtkWidget *misc = gtk_label_new(HTMLVIEW);
+  misc = gtk_label_new(HTMLVIEW);
   gtk_box_pack_start(GTK_BOX(vbox), misc, FALSE, TRUE, 6);
 
   misc = gtk_label_new(PLUGIN_DESC);
   gtk_box_pack_start(GTK_BOX(vbox), misc, FALSE, TRUE, 6);
 
   /* copyright */
-  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+  scrolled = gtk_scrolled_window_new(NULL, NULL);
 
-  GtkTextBuffer *tbuffer = gtk_text_buffer_new(NULL);
+  tbuffer = gtk_text_buffer_new(NULL);
   gtk_text_buffer_set_text(tbuffer, _(copyright), strlen(copyright));
-  GtkWidget *tview = gtk_text_view_new_with_buffer(tbuffer);
+  tview = gtk_text_view_new_with_buffer(tbuffer);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), FALSE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
 
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, 6);
 
-  GtkWidget *general_lbl = gtk_label_new(_("About"));
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, general_lbl);
+  label = gtk_label_new(_("About"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), hbox, label);
   gtk_widget_show_all(notebook);
 
   SYLPF_RETURN_VALUE(NULL);

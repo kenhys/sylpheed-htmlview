@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([htmlview], [0.4.0], [kenhys@gmail.com])
+AC_INIT([htmlview], [0.5.0], [kenhys@gmail.com])
 AC_CONFIG_SRCDIR([src/htmlview.c])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_AUX_DIR([config])
@@ -21,6 +21,11 @@ if test "$CC" = "clang"; then
 else
   CLANG=no
 fi
+
+AC_DEFINE([SYLPF_ID], [PACKAGE_NAME], [""])
+AC_DEFINE([SYLPF_OPTION], [htmlview_option], [""])
+
+m4_include(lib/sylplugin_factory/m4/compiler_flag.m4)
 
 # Checks for libraries.
 AM_PATH_GLIB_2_0(2.8.0,, AC_MSG_ERROR(Test for GLib failed. See the 'INSTALL' for help.))
@@ -87,7 +92,7 @@ AC_SUBST(plugin_debug)
 
 
 # Checks for header files.
-m4_include(../sylplugin_factory/m4/sylplugin_factory.m4)
+m4_include(lib/sylplugin_factory/m4/sylplugin_factory.m4)
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
@@ -100,4 +105,5 @@ echo "  For HTML Preview..."
 echo ""
 echo "    WebKitGTK: ${enable_webkitgtk}"
 echo "      GtkHTML: ${enable_gtkhtml}"
+echo " Sylpheed plugin factory source directory: ${sylplugin_factory_source_dir}"
 echo ""

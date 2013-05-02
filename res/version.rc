@@ -3,8 +3,8 @@
 #include "../src/private_build.h"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,0,0
- PRODUCTVERSION 0,1,0,0
+ FILEVERSION 0,4,0,0
+ PRODUCTVERSION 0,4,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS VS_FF_DEBUG
@@ -19,17 +19,17 @@ BEGIN
     BEGIN
         BLOCK "041104b0"
         BEGIN
-            VALUE "Comments", "HtmlView 0.1.0\0"
+            VALUE "Comments", "HtmlView 0.4.0\0"
             VALUE "CompanyName", "GiGo I.C.E.\0"
-            VALUE "FileDescription", "HtmlView 0.1.0\0"
-            VALUE "FileVersion", "0, 1, 0, 1\0"
+            VALUE "FileDescription", "HtmlView 0.4.0\0"
+            VALUE "FileVersion", "0, 4, 0, 1\0"
             VALUE "InternalName", "htmlview\0"
-            VALUE "LegalCopyright", "Copyright (C) 2012 HAYASHI Kentaro\0"
-            VALUE "LegalTrademarks", "Copyright (C) 2012 HAYASHI Kentaro\0"
+            VALUE "LegalCopyright", "Copyright (C) 2012-2013 HAYASHI Kentaro\0"
+            VALUE "LegalTrademarks", "Copyright (C) 2012-2013 HAYASHI Kentaro\0"
             VALUE "OriginalFilename", "htmlview.dll\0"
             VALUE "PrivateBuild", PRIVATE_BUILD
-            VALUE "ProductName", "HtmlView 0.1.0\0"
-            VALUE "ProductVersion", "0, 1, 0, 0\0"
+            VALUE "ProductName", "HtmlView 0.4.0\0"
+            VALUE "ProductVersion", "0, 4, 0, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
