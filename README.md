@@ -13,12 +13,17 @@ Install
 
 ```sh
 % svn checkout svn://sylpheed.sraoss.jp/sylpheed/trunk sylpheed
-% cd sylpheed/plugin
+% cd sylpheed
+% ./autogen.sh
+% ./configure
+% make
+% cd plugin
 % git clone https://github.com/kenhys/sylpheed-htmlview.git htmlview
-% git clone https://github.com/kenhys/sylpheed-plugin-factory.git sylplugin_factory
 % cd htmlview
-% sh ./autogen.sh
-% sh ./configure
+% git submodule init
+% git submodule update
+% ./autogen.sh
+% ./configure --with-sylpheed-build-dir=`pwd`/../../ --enable-webkitgtk
 % make
 % make copy
 ```
