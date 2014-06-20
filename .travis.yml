@@ -15,7 +15,7 @@ env:
   - USE_WEBKITGTK=yes USE_DEBUG=yes
   - USE_GTKHTML=yes USE_DEBUG=yes
 before_script:
-  - curl https://raw.github.com/kenhys/sylpheed-plugin-factory/master/misc/setup-travis.sh | sh
+  - curl --location https://raw.github.com/kenhys/sylpheed-plugin-factory/master/misc/setup-travis.sh | sh
   - git submodule update --init --recursive
   - ./autogen.sh
 script:
