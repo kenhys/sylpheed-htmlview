@@ -10,10 +10,12 @@ branches:
     - master
     - develop
 env:
-  - USE_WEBKITGTK=yes
-  - USE_GTKHTML=yes
-  - USE_WEBKITGTK=yes USE_DEBUG=yes
-  - USE_GTKHTML=yes USE_DEBUG=yes
+  - USE_WEBKITGTK=yes SYLPHEED_STAGE=master
+  - USE_GTKHTML=yes SYLPHEED_STAGE=master
+  - USE_WEBKITGTK=yes SYLPHEED_STAGE=3.5
+  - USE_GTKHTML=yes SYLPHEED_STAGE=3.5
+  - USE_WEBKITGTK=yes SYLPHEED_STAGE=3.4
+  - USE_GTKHTML=yes SYLPHEED_STAGE=3.4
 before_script:
   - curl --location https://raw.github.com/kenhys/sylpheed-plugin-factory/master/misc/setup-travis.sh | sh
   - git submodule update --init --recursive
