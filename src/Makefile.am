@@ -19,7 +19,7 @@ htmlview_la_SOURCES = htmlview.c htmlview.h \
 htmlview_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(GTK_CFLAGS) \
         $(HTML_CFLAGS) \
 	-I$(includedir) \
