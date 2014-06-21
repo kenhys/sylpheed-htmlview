@@ -1,4 +1,6 @@
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 if USE_WEBKITGTK
 HTML_CFLAGS=`pkg-config --cflags webkit-1.0`
 HTML_LIBS=`pkg-config --libs webkit-1.0`
