@@ -90,7 +90,6 @@ AC_SUBST(plugin_debug)
 
 
 # Checks for header files.
-m4_include(lib/sylplugin_factory/m4/sylplugin_factory.m4)
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
