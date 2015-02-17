@@ -25,8 +25,6 @@ fi
 AC_DEFINE([SYLPF_ID], [PACKAGE_NAME], [""])
 AC_DEFINE([SYLPF_OPTION], [htmlview_option], [""])
 
-m4_include(lib/sylplugin_factory/m4/compiler_flag.m4)
-
 # Checks for libraries.
 AM_PATH_GLIB_2_0(2.8.0,, AC_MSG_ERROR(Test for GLib failed. See the 'INSTALL' for help.))
 AM_PATH_GTK_2_0(2.8.0,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' for help.))
