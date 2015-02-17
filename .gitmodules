@@ -1,3 +1,0 @@
-[submodule "lib/sylplugin_factory"]
-	path = lib/sylplugin_factory
-	url = git://github.com/kenhys/sylpheed-plugin-factory
