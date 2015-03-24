@@ -20,6 +20,7 @@ AM_CPPFLAGS = \
 
 htmlview_la_LIBADD = \
 	$(GTK_LIBS) \
+	$(WEBKITGTK_LIBS) \
 	$(GTKHTML_LIBS) \
         $(sylpheed_build_dir)/src/libsylpheed-plugin-0.la \
 	$(sylpheed_build_dir)/libsylph/libsylph-0.la \
