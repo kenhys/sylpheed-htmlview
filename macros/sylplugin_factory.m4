@@ -42,6 +42,21 @@ fi
 AC_SUBST(sylplugin_factory_source_dir)
 AM_CONDITIONAL([WITH_SYLPLUGIN_FACTORY], [test "$sylpfdir_available" = "yes"])
 
+AC_ARG_WITH(sylpheed-plugin-dir,
+            [AS_HELP_STRING([--with-sypheed-plugin-dir=DIR],
+            [specify sylpheed plugin directory.])],
+            [sylplugin_dir="$withval"])
+if test "x$sylplugin_dir" = "x"; then
+  sylplugindir_available="yes"
+  sylplugin_dir=$prefix/lib/sylpheed/plugins
+else
+  if test -d "$sylplugin_dir"; then
+    sylplugindir_available="yes"
+  fi
+fi
+AC_SUBST(sylplugin_dir)
+AM_CONDITIONAL([WITH_SYLPLUGIN], [test "$syplugindir_available" = "yes"])
+
 AC_ARG_WITH(libsylph-impl,
             [AS_HELP_STRING([--with-libsylph-impl=LIBRARY],
             [specify libsylph import library(.a)])],
