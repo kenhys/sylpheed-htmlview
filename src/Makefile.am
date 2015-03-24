@@ -1,14 +1,4 @@
 
-if USE_WEBKITGTK
-HTML_CFLAGS=`pkg-config --cflags webkit-1.0`
-HTML_LIBS=`pkg-config --libs webkit-1.0`
-endif
-
-if USE_GTKHTML
-HTML_CFLAGS=`pkg-config --cflags libgtkhtml-3.14`
-HTML_LIBS=`pkg-config --libs libgtkhtml-3.14`
-endif
-
 libdir = $(sylplugin_dir)
 
 lib_LTLIBRARIES = htmlview.la
