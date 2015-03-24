@@ -26,7 +26,7 @@ AM_CPPFLAGS = \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
 	-I$(sylpheed_build_dir)/src \
-	-I$(SYLPF_CFLAGS)
+	$(SYLPF_CFLAGS)
 
 htmlview_la_LIBADD = \
 	$(GTK_LIBS) \
