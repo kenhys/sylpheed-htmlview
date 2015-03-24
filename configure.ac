@@ -32,6 +32,10 @@ AM_PATH_GTK_2_0(2.8.0,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' for 
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
+PKG_CHECK_MODULES([GLIB], [glib-2.0])
+PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+PKG_CHECK_MODULES([SYLPF], [sylplugin-factory])
+
 AC_ARG_ENABLE([webkitgtk],
 	      [AS_HELP_STRING([--enable-webkitgtk],
                               [use WebKitGTK as HTML rendering engine. [default=auto]])],
