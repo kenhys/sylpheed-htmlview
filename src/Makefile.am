@@ -13,7 +13,9 @@ libdir = $(sylplugin_dir)
 
 lib_LTLIBRARIES = htmlview.la
 
-htmlview_la_SOURCES = htmlview.c htmlview.h \
+htmlview_la_SOURCES = \
+	htmlview.c \
+	htmlview.h
 htmlview_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
 
