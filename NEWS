@@ -1,5 +1,8 @@
 News of htmlview
 
+* 0.6.0 (2015-03-24)
+  * clean up build process
+
 * 0.5.0 (2013-05-02)
   * supported windows
   * added Travis-CI integration
