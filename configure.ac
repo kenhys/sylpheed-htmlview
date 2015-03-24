@@ -62,14 +62,20 @@ fi
 AC_MSG_RESULT($enable_gtkhtml)
 
 AS_IF([test "x$enable_webkitgtk" != xno && test "x$enable_gtkhtml" != xno],
-      [AC_DEFINE([USE_GTKHTML], [1], [GtkHTML support])],
+      [
+        AC_DEFINE([USE_GTKHTML], [1], [GtkHTML support])
+	PKG_CHECK_MODULES([GTKHTML], [libgtkhtml-3.14])
+      ],
       [test "x$enable_webkitgtk" != xno && test "x$enable_gtkhtml" != xyes],
       [
         AC_DEFINE([USE_WEBKITGTK], [1], [WebKitGTK support])
 	PKG_CHECK_MODULES([WEBKITGTK], [webkit-1.0])
       ],
       [test "x$enable_webkitgtk" != xyes && test "x$enable_gtkhtml" != xno],
-      [AC_DEFINE([USE_GTKHTML], [1], [GtkHTML support])],
+      [
+        AC_DEFINE([USE_GTKHTML], [1], [GtkHTML support])
+	PKG_CHECK_MODULES([GTKHTML], [libgtkhtml-3.14])
+      ],
       [AC_MSG_ERROR(use WebKitGTK or GtkHTML exclusively.)]
 )
 
