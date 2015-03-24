@@ -92,6 +92,7 @@ if test "x$plugin_debug" != "xno"; then
 fi
 AC_SUBST(plugin_debug)
 
+m4_include(macros/sylplugin_factory.m4)
 
 # Checks for header files.
 # Checks for typedefs, structures, and compiler characteristics.
