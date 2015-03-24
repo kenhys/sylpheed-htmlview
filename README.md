@@ -11,22 +11,38 @@ recommend to use Ubuntu 12.04 or later.
 Install
 -------
 
-1. checkout sylpheed source code.
-2. git clone https://github.com/kenhys/sylpheed-htmlview.git into plugin directory.
-   HINT: sylpheed/plugin/htmlview
-3. git clone https://github.com/kenhys/sylpheed-plugin-factory.git into plugin directory.
-   HINT: sylpheed/plugin/sylplugin_factory
-4. modify configure.ac for generating Makefile.
-   HINT: htmlview/Makefile, htmlview/src/Makefile, sylplugin_factory/Makefile and
-   sylplugin_factory/src/Makefile.
-5. sh autogen.sh in sylpheed directory.
-6. execute configure.
-7. build plugins by make command.
+```sh
+% svn checkout svn://sylpheed.sraoss.jp/sylpheed/trunk sylpheed
+% cd sylpheed
+% ./autogen.sh
+% ./configure
+% make
+% cd plugin
+% git clone https://github.com/kenhys/sylpheed-htmlview.git htmlview
+% cd htmlview
+% git submodule init
+% git submodule update
+% ./autogen.sh
+% ./configure --with-sylpheed-build-dir=`pwd`/../../ --enable-webkitgtk
+% make
+% make copy
+```
 
-copy compiled htmlview.so into plugin directory.
+**make copy** copies the compiled htmlview shared object into plugin directory.
 
 Usage
 -----
+
+Click [Tools]-[HtmlView [htmlview]]] menu, then customize preference settings about htmlview plugin.
+
+Note that this plugin requires [Toggle attachment list view with tab] option is enabled.
+
+Check required option by follows:
+
+1. Click [Configuration]-[Common preferences]
+2. Select [Display] tab
+3. Select [Attachment] tab inside [Display] tab
+4. Confirm [Toggle attachment list view with tab] is enabled
 
 Browse html mail.
 htmlview plugin automatically renders HTML mail in messageview.
