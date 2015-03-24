@@ -9,6 +9,8 @@ HTML_CFLAGS=`pkg-config --cflags libgtkhtml-3.14`
 HTML_LIBS=`pkg-config --libs libgtkhtml-3.14`
 endif
 
+libdir = $(sylplugin_dir)
+
 lib_LTLIBRARIES = htmlview.la
 
 htmlview_la_SOURCES = htmlview.c htmlview.h \
