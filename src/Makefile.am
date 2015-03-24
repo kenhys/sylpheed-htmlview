@@ -11,9 +11,8 @@ htmlview_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
 AM_CPPFLAGS = \
 	$(GTK_CFLAGS) \
-        $(HTML_CFLAGS) \
+        $(WEBKITGTK_CFLAGS) \
 	-I$(includedir) \
-	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
 	-I$(sylpheed_build_dir)/src \
 	$(SYLPF_CFLAGS)
