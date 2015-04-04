@@ -19,7 +19,6 @@ env:
 before_script:
   - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylpheed.sh | sh
   - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylplugin-factory.sh | sh
-  - git submodule update --init --recursive
   - ./autogen.sh
 script:
   - curl --location https://raw.github.com/kenhys/sylpheed-plugin-factory/master/misc/configure.sh | sh
