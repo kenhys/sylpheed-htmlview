@@ -21,6 +21,6 @@ before_script:
   - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylplugin-factory.sh | sh
   - ./autogen.sh
 script:
-  - curl --location https://raw.github.com/kenhys/sylpheed-plugin-factory/master/misc/configure.sh | sh
+  - curl --location https://raw.github.com/kenhys/sylpheed-plugin-factory/master/misc/travis/configure.sh | sh
   - make
 
