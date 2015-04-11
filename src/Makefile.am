@@ -14,7 +14,7 @@ AM_CPPFLAGS = \
         $(WEBKITGTK_CFLAGS) \
         $(GTKHTML_CFLAGS) \
 	-I$(includedir) \
-	$(SYLPHEED_CFLAGS)
+	$(SYLPHEED_CFLAGS) \
 	$(SYLPF_CFLAGS)
 
 htmlview_la_LIBADD = \
