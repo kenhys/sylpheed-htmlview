@@ -1,3 +1,6 @@
+#
+# --with-sylpheed-build-dir
+#
 AC_ARG_WITH(sylpheed-build-dir,
             [AS_HELP_STRING([--with-sylpheed-build-dir=DIR],
             [specify sylpheed build directory.])],
@@ -24,6 +27,12 @@ fi
 AC_SUBST(sylpheed_build_dir)
 AM_CONDITIONAL([WITH_SYLPHEED], [test "$syldir_available" = "yes"])
 
+SYLPHEED_CFLAGS="-I${sylpheed_build_dir}/libsylph -I$sylpheed_build_dir/src"
+AC_SUBST(SYLPHEED_CFLAGS)
+
+#
+# --with-sylplugin-factory-source-dir
+#
 AC_ARG_WITH(sylplugin-factory-source-dir,
             [AS_HELP_STRING([--with-sylplugin-factory-source-dir=DIR],
             [specify sylpheed-plugin-factory source directory.])],
@@ -42,6 +51,9 @@ fi
 AC_SUBST(sylplugin_factory_source_dir)
 AM_CONDITIONAL([WITH_SYLPLUGIN_FACTORY], [test "$sylpfdir_available" = "yes"])
 
+#
+# --with-sylpheed-plugin-dir
+#
 AC_ARG_WITH(sylpheed-plugin-dir,
             [AS_HELP_STRING([--with-sypheed-plugin-dir=DIR],
             [specify sylpheed plugin directory.])],
@@ -57,6 +69,9 @@ fi
 AC_SUBST(sylplugin_dir)
 AM_CONDITIONAL([WITH_SYLPLUGIN], [test "$syplugindir_available" = "yes"])
 
+#
+# --with-libsylph-impl
+#
 AC_ARG_WITH(libsylph-impl,
             [AS_HELP_STRING([--with-libsylph-impl=LIBRARY],
             [specify libsylph import library(.a)])],
@@ -71,6 +86,9 @@ fi
 AC_SUBST(libsylph_impl)
 AM_CONDITIONAL([WITH_LIBSYLPH_IMPL], [test "$libsylph_impl_available" = "yes"])
 
+#
+# --with-libsylpheeed-impl
+#
 AC_ARG_WITH(libsylpheed-impl,
             [AS_HELP_STRING([--with-libsylpheed-impl=LIBRARY],
             [specify libsylpheed import library(.a)])],
@@ -84,3 +102,16 @@ else
 fi
 AC_SUBST(libsylpheed_impl)
 AM_CONDITIONAL([WITH_LIBSYLPHEED_IMPL], [test "$libsylpheed_impl_available" = "yes"])
+
+if test "x$libsylph_impl" != "x"; then
+  LIBSYLPH_IMPL="$libsylph_impl"
+else
+  LIBSYLPH_IMPL="${sylpheed_build_dir}/libsylph/libsylph-0.la"
+fi
+if test "x$libsylpheed_impl" = "x"; then
+  LIBSYLPHEED_IMPL="$libslpheed_impl"
+else
+  LIBSYLPHEED_IMPL="${sylpheed_build_dir}/src/libsylpheed-plugin-0.la"
+fi
+SYLPHEED_LIBS="$LIBSYLPH_IMPL $LIBSYLPHEED_IMPL"
+AC_SUBST(SYLPHEED_LIBS)
