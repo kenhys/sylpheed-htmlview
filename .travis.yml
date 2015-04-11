@@ -17,7 +17,6 @@ env:
   - USE_WEBKITGTK=yes SYLPHEED_STAGE=3.4
   - USE_GTKHTML=yes SYLPHEED_STAGE=3.4
 before_script:
-  - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylpheed.sh | sh
   - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylplugin-factory.sh | sh
   - ./autogen.sh
 script:
