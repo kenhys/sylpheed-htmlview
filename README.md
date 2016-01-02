@@ -2,9 +2,8 @@
 
 ## Requirement
 
-Sylpheed 3.2.0 or later
-
-recommend to use Ubuntu 12.04 or later.
+* Sylpheed 3.2.0 or later
+* Ubuntu 12.04 or later is recommended
 
 ## Install
 
