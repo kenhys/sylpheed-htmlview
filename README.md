@@ -1,15 +1,12 @@
-HtmlView - HTML mail support plug-in for Sylpheed
-=================================================
+# HtmlView - HTML mail support plug-in for Sylpheed
 
-Requirement
------------
+## Requirement
 
 Sylpheed 3.2.0 or later
 
 recommend to use Ubuntu 12.04 or later.
 
-Install
--------
+## Install
 
 ```sh
 % svn checkout svn://sylpheed.sraoss.jp/sylpheed/trunk sylpheed
@@ -30,8 +27,7 @@ Install
 
 **make copy** copies the compiled htmlview shared object into plugin directory.
 
-Usage
------
+## Usage
 
 Click [Tools]-[HtmlView [htmlview]]] menu, then customize preference settings about htmlview plugin.
 
@@ -47,6 +43,6 @@ Check required option by follows:
 Browse html mail.
 htmlview plugin automatically renders HTML mail in messageview.
 
-# TODO
+## TODO
 
 * Support Windows
