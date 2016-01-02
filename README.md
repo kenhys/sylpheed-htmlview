@@ -47,3 +47,6 @@ Check required option by follows:
 Browse html mail.
 htmlview plugin automatically renders HTML mail in messageview.
 
+# TODO
+
+* Support Windows
