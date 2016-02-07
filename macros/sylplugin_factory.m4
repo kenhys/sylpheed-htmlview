@@ -60,7 +60,11 @@ AC_ARG_WITH(sylpheed-plugin-dir,
             [sylplugin_dir="$withval"])
 if test "x$sylplugin_dir" = "x"; then
   sylplugindir_available="yes"
-  sylplugin_dir=$prefix/lib/sylpheed/plugins
+  if test -d "$prefix"; then
+    sylplugin_dir=$prefix/lib/sylpheed/plugins
+  else
+    sylplugin_dir=/usr/local/lib/sylpheed/plugins
+  fi
 else
   if test -d "$sylplugin_dir"; then
     sylplugindir_available="yes"
