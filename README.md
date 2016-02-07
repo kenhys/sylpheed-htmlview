@@ -8,21 +8,29 @@
 
 ## Install
 
+In this scenario, we assume that we use master version of Sylpheed.
+
 ```sh
 % svn checkout svn://sylpheed.sraoss.jp/sylpheed/trunk sylpheed
 % cd sylpheed
 % ./autogen.sh
 % ./configure
 % make
+% sudo make install
 % cd plugin
-% git clone https://github.com/kenhys/sylpheed-htmlview.git htmlview
-% cd htmlview
-% git submodule init
-% git submodule update
+% git clone https://github.com/kenhys/sylpheed-plugin-factory.git
+% cd sylpheed-plugin-factory
+% ./autogen.sh
+% ./configure --with-sylpheed-build-dir=`pwd`/../../
+% make
+% sudo make install
+% cd -
+% git clone https://github.com/kenhys/sylpheed-htmlview.git
+% cd sylpheed-htmlview
 % ./autogen.sh
 % ./configure --with-sylpheed-build-dir=`pwd`/../../ --enable-webkitgtk
 % make
-% make copy
+% sudo make install
 ```
 
 **make copy** copies the compiled htmlview shared object into plugin directory.
