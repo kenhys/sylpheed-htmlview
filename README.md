@@ -33,8 +33,6 @@ In this scenario, we assume that we use master version of Sylpheed.
 % sudo make install
 ```
 
-**make copy** copies the compiled htmlview shared object into plugin directory.
-
 ## Usage
 
 Click [Tools]-[HtmlView [htmlview]]] menu, then customize preference settings about htmlview plugin.
