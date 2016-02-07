@@ -4,6 +4,7 @@
 
 * Sylpheed 3.2.0 or later
 * Ubuntu 12.04 or later is recommended
+* [sylpheed-plubin-factory](https://github.com/kenhys/sylpheed-plugin-factory)
 
 ## Install
 
