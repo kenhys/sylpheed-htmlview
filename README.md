@@ -10,6 +10,8 @@
 
 In this scenario, we assume that we use master version of Sylpheed.
 
+Step 1. build sylpheed
+
 ```sh
 % svn checkout svn://sylpheed.sraoss.jp/sylpheed/trunk sylpheed
 % cd sylpheed
@@ -17,6 +19,11 @@ In this scenario, we assume that we use master version of Sylpheed.
 % ./configure
 % make
 % sudo make install
+```
+
+Step 2. build sylpheed-plubin-factory library
+
+```
 % cd plugin
 % git clone https://github.com/kenhys/sylpheed-plugin-factory.git
 % cd sylpheed-plugin-factory
@@ -25,6 +32,11 @@ In this scenario, we assume that we use master version of Sylpheed.
 % make
 % sudo make install
 % cd -
+```
+
+Step 3. build htmlview plugin
+
+```
 % git clone https://github.com/kenhys/sylpheed-htmlview.git
 % cd sylpheed-htmlview
 % ./autogen.sh
