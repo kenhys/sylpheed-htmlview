@@ -21,14 +21,14 @@ In this scenario, we assume that we use master version of Sylpheed.
 % git clone https://github.com/kenhys/sylpheed-plugin-factory.git
 % cd sylpheed-plugin-factory
 % ./autogen.sh
-% ./configure --with-sylpheed-build-dir=`pwd`/../../
+% ./configure
 % make
 % sudo make install
 % cd -
 % git clone https://github.com/kenhys/sylpheed-htmlview.git
 % cd sylpheed-htmlview
 % ./autogen.sh
-% ./configure --with-sylpheed-build-dir=`pwd`/../../ --enable-webkitgtk
+% ./configure --enable-webkitgtk
 % make
 % sudo make install
 ```
