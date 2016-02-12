@@ -1,5 +1,13 @@
 News of htmlview
 
+* 0.7.0 (2015-03-24)
+  * fix build error when --prefix is not specified
+    [GitHub#3][Reported by @tliron]
+  * update install instruction
+    [GitHub#4,#6][Reported by @tliron]
+  * fix linking against invalid modable module
+    [GitHub#5][Reported by @tliron]
+
 * 0.6.0 (2015-03-24)
   * clean up build process
 
