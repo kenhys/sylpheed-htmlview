@@ -4,7 +4,7 @@
 
 * Sylpheed 3.2.0 or later
 * Ubuntu 12.04 or later is recommended
-* [sylpheed-plubin-factory](https://github.com/kenhys/sylpheed-plugin-factory)
+* [sylpheed-plugin-factory](https://github.com/kenhys/sylpheed-plugin-factory)
 
 ## Install
 
@@ -21,7 +21,7 @@ Step 1. build sylpheed
 % sudo make install
 ```
 
-Step 2. build sylpheed-plubin-factory library
+Step 2. build sylpheed-plugin-factory library
 
 ```
 % cd plugin
